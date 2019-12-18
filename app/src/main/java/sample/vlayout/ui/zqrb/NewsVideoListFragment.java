@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ import sample.vlayout.ui.zqrb.vlayout.BaseDelegateAdapter;
 import sample.vlayout.ui.zqrb.vlayout.BaseViewHolder;
 import sample.vlayout.utils.AssetsUtils;
 import sample.vlayout.utils.GsonUtils;
+import sample.vlayout.utils.ScreenShotUtils;
 import sample.vlayout.utils.image.ImageLoader;
 
 /**
@@ -146,7 +148,7 @@ public class NewsVideoListFragment extends Fragment {
     标题+三个小图音频 5		mediaType=2
     */
     private void initAdapters(DelegateAdapter delegateAdapter) {
-        List<VideoListEntity.DataBean> data = mData;
+        final List<VideoListEntity.DataBean> data = mData;
         BaseDelegateAdapter adapter = null;
 
         for (VideoListEntity.DataBean bean : data) {
@@ -191,10 +193,22 @@ public class NewsVideoListFragment extends Fragment {
             public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
                 holder.setText(R.id.tv_title, title);
-                holder.getView(R.id.tv_show_more).setVisibility(showMore ? View.VISIBLE : View.GONE);
+                TextView tvMore = holder.getView(R.id.tv_show_more);
+                tvMore.setVisibility(showMore ? View.VISIBLE : View.GONE);
+                if (showMore) {
+                    tvMore.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ScreenShotUtils.showRecyclerViewShotDialog(mRecyclerView);
+
+                            Toast.makeText(activity, title, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         };
     }
+
 
     public BaseDelegateAdapter initList2(String title, String summary, int showNum) {
         LinearLayoutHelper linearLayoutHelper = new LinearLayoutHelper();
