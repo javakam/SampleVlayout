@@ -8,4 +8,58 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="dialog_style" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+
+    <style name="MyTabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="tabBackground">@android:color/white</item>
+        <item name="tabIndicatorColor">@android:color/holo_red_light</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabSelectedTextColor">@android:color/holo_red_light</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- 深色下划线 -->
+    <style name="DeepUnderLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/grayLine</item>
+    </style>
+
+
+    <!-- 深色下划线 -->
+    <style name="DeepUnderLineDp">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/grayLine</item>
+    </style>
+
+    <!-- 深色下划线 -->
+    <style name="DeepUnderLineSecond">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/grayLine</item>
+    </style>
+
+    <!-- 浅线水平全部分割 颜色深-->
+    <style name="divider_all_horizontal_transport">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.01dp</item>
+        <item name="android:background">@color/alpha_15_white</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <!-- 浅线水平全部分割 颜色深-->
+    <style name="divider_all_vertical_transport">
+        <item name="android:layout_width">0.01dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/alpha_15_white</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>
