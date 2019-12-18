@@ -22,6 +22,7 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -166,7 +167,7 @@ public class NewsVideoListFragment extends Fragment {
                     mAdapters.add(adapter);
                     break;
                 case ViewType.TYPE_TITLE_IMAGE_BIG:
-                    adapter = initList4(bean.getContent(), bean.getShowNum());
+                    adapter = initList4(bean);
                     mAdapters.add(adapter);
                     break;
                 case ViewType.TYPE_TITLE_IMAGE_THREE:
@@ -201,7 +202,7 @@ public class NewsVideoListFragment extends Fragment {
         //linearLayoutHelper.setAspectRatio(4.0f);
         linearLayoutHelper.setDividerHeight(1);
         linearLayoutHelper.setMargin(0, 0, 0, 0);
-        linearLayoutHelper.setPadding(0, 20, 0, 2);
+        linearLayoutHelper.setPadding(0, 0, 0, 0);
 
         return new BaseDelegateAdapter(activity, linearLayoutHelper, R.layout.view_vlayout_summary, showNum, ViewType.TYPE_TITLE_SUMMARY) {
             @Override
@@ -212,7 +213,7 @@ public class NewsVideoListFragment extends Fragment {
 
                 Objects.requireNonNull(holder.itemView).setOnClickListener(v -> {
                     //点击事件
-                    Toast.makeText(activity, "position : " + position, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "initList2  position : " + position, Toast.LENGTH_SHORT).show();
                 });
             }
         };
@@ -243,22 +244,35 @@ public class NewsVideoListFragment extends Fragment {
         };
     }
 
-    private BaseDelegateAdapter initList4(List<VideoListEntity.DataBean.ContentBean> content, int showNum) {
+    private BaseDelegateAdapter initList4(VideoListEntity.DataBean bean) {
 //        OnePlusNLayoutHelper onePlusNLayoutHelper = new OnePlusNLayoutHelper();
 //        //noinspection deprecation
 //        onePlusNLayoutHelper.setBgColor(activity.getResources().getColor(android.R.color.white));
 //        onePlusNLayoutHelper.setMargin(0, 0, 0, 0);
 //        onePlusNLayoutHelper.setPadding(10, 20, 10, 10);
 
-        return new BaseDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.view_vlayout_img_big, showNum, ViewType.TYPE_TITLE_IMAGE_BIG) {
+
+        return new BaseDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.view_vlayout_img_big, bean.getShowNum(), ViewType.TYPE_TITLE_IMAGE_BIG) {
             @Override
             public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
-                final VideoListEntity.DataBean.ContentBean bean = content.get(position);
-                holder.setText(R.id.tv_summary, bean.getSummary());
+                String title = "";
+                String summary = "";
+                String cover = "";
+                if (bean.getMediaType() == 0) {
+                    title = bean.getTitle();
+                    summary = bean.getSummary();
+                    cover = bean.getCover();
+                } else {
+                    final VideoListEntity.DataBean.ContentBean contentBean = bean.getContent().get(position);
+                    title = contentBean.getTitle();
+                    summary = contentBean.getSummary();
+                    cover = contentBean.getCover();
+                }
 
+                holder.setText(R.id.tv_summary, title + "  " + summary);
                 ImageView iv = holder.getView(R.id.iv_big);
-                ImageLoader.get().loadImage(iv, bean.getCover());
+                ImageLoader.get().loadImage(iv, cover);
 
                 Objects.requireNonNull(holder.itemView).setOnClickListener(v -> {
                     //点击事件
@@ -271,8 +285,8 @@ public class NewsVideoListFragment extends Fragment {
     public BaseDelegateAdapter initList5(List<VideoListEntity.DataBean.ContentBean> contentList, int showNum) {
 
         GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
-        gridLayoutHelper.setMargin(20, 0, 20, 0);
-        gridLayoutHelper.setPadding(0, 20, 0, 10);
+        gridLayoutHelper.setMargin(0, 0, 0, 0);
+        gridLayoutHelper.setPadding(0, 10, 0, 10);
         gridLayoutHelper.setBgColor(Color.WHITE);
         //gridLayoutHelper.setAspectRatio(1.5f);  // 设置设置布局内每行布局的宽与高的比
         // gridLayoutHelper特有属性（下面会详细说明）

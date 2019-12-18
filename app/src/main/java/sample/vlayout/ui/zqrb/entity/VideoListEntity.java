@@ -98,6 +98,10 @@ public class VideoListEntity implements Serializable {
         private String coverBig;
         private List<ContentBean> content;
 
+        public int getShowNum() {
+            return showNum == 0 ? 1 : showNum;
+        }
+
         public int getId() {
             return id;
         }
@@ -146,9 +150,6 @@ public class VideoListEntity implements Serializable {
             this.mediaType = mediaType;
         }
 
-        public int getShowNum() {
-            return showNum;
-        }
 
         public void setShowNum(int showNum) {
             this.showNum = showNum;

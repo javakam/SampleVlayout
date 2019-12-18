@@ -133,27 +133,17 @@
             "SD": "http://vod.zqrb.cn/157e21f555bd4f2b98941fd99626c70f/f9460215e43c41f39e5ac635b3388851-8a2d66e250aa0aa61bfea7e4ce3f4461-sd.mp4",
             "HD": "http://vod.zqrb.cn/157e21f555bd4f2b98941fd99626c70f/f9460215e43c41f39e5ac635b3388851-4c4d99be9d999f92c7be00132a82b657-hd.mp4"
           },
-          "cover": "http://vod.zqrb.cn/157e21f555bd4f2b98941fd99626c70f/snapshots/312c9177bc9b454c88663cc1ef2716fb-00004.jpg"
+          "cover": "http://vod.zqrb.cn/157e21f555bd4f2b98941fd99626c70f/snapshots/312c9177bc9b454c88663cc1ef2716fb-00004.jpg",
+          "coverBig": "http://vod.zqrb.cn/157e21f555bd4f2b98941fd99626c70f/snapshots/312c9177bc9b454c88663cc1ef2716fb-00004.jpg"
         }
       ]
     },
     {
       "id": 123,
-      "viewType": 2,
-      "title": "标题✔图片X",
-      "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
+      "viewType": 1,
+      "title": "高端访谈(非视频)",
       "more": true,
-      "mediaType": 0,
-      "url": "",
-      "createtime": 1555663308,
-      "updatetime": 1555663308,
-      "commentNum": "1865",
-      "praiseNum": "98",
-      "shareNum": "786",
-      "authorId": "1212212",
-      "authorName": "逗你玩",
-      "source": "证券日报",
-      "categoryname": "新三板123"
+      "icon": ""
     },
     {
       "id": 123,
@@ -224,6 +214,24 @@
     },
     {
       "id": 123,
+      "viewType": 2,
+      "title": "标题✔图片X",
+      "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
+      "more": true,
+      "mediaType": 0,
+      "url": "",
+      "createtime": 1555663308,
+      "updatetime": 1555663308,
+      "commentNum": "1865",
+      "praiseNum": "98",
+      "shareNum": "786",
+      "authorId": "1212212",
+      "authorName": "逗你玩",
+      "source": "证券日报",
+      "categoryname": "新三板123"
+    },
+    {
+      "id": 123,
       "viewType": 3,
       "title": "标题✔图片(小)✔",
       "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
@@ -259,6 +267,13 @@
       "authorName": "逗你玩",
       "cover": "http://vod.zqrb.cn/15093469c30b4c40a7d4d4b70ac91d39/snapshots/4d2c826f559d4ea082465019c7ab81a0-00005.jpg",
       "coverBig": "http://vod.zqrb.cn/15093469c30b4c40a7d4d4b70ac91d39/snapshots/4d2c826f559d4ea082465019c7ab81a0-00005.jpg"
+    },
+    {
+      "id": 123,
+      "viewType": 1,
+      "title": "音频列表",
+      "more": true,
+      "icon": ""
     },
     {
       "id": 123,
