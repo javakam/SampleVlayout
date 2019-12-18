@@ -22,6 +22,7 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
+import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,11 +47,8 @@ import sample.vlayout.utils.image.ImageLoader;
  */
 public class NewsVideoListFragment extends Fragment {
 
-
     public static NewsVideoListFragment newInstance() {
-
         Bundle args = new Bundle();
-
         NewsVideoListFragment fragment = new NewsVideoListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -108,7 +106,7 @@ public class NewsVideoListFragment extends Fragment {
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                outRect.set(10, 10, 10, 10);
+                outRect.set(0, 0, 0, 10);
             }
         });
 
@@ -187,7 +185,8 @@ public class NewsVideoListFragment extends Fragment {
     }
 
     public BaseDelegateAdapter initTitle(final String title, final boolean showMore) {
-        return new BaseDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.base_view_title, 1, ViewType.TYPE_TITLE) {
+        // LinearLayoutHelper
+        return new BaseDelegateAdapter(activity, new StickyLayoutHelper(), R.layout.vlayout_title, 1, ViewType.TYPE_TITLE) {
             @Override
             public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
@@ -204,7 +203,7 @@ public class NewsVideoListFragment extends Fragment {
         linearLayoutHelper.setMargin(0, 0, 0, 0);
         linearLayoutHelper.setPadding(0, 0, 0, 0);
 
-        return new BaseDelegateAdapter(activity, linearLayoutHelper, R.layout.view_vlayout_summary, showNum, ViewType.TYPE_TITLE_SUMMARY) {
+        return new BaseDelegateAdapter(activity, linearLayoutHelper, R.layout.vlayout_title_summary, showNum, ViewType.TYPE_TITLE_SUMMARY) {
             @Override
             public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
@@ -221,11 +220,12 @@ public class NewsVideoListFragment extends Fragment {
 
     public BaseDelegateAdapter initList3(String title, String summary, String cover, int showNum) {
         LinearLayoutHelper linearLayoutHelper = new LinearLayoutHelper();
-        linearLayoutHelper.setAspectRatio(4.0f);
-        linearLayoutHelper.setDividerHeight(5);
-        linearLayoutHelper.setMargin(0, 0, 0, 0);
-        linearLayoutHelper.setPadding(0, 0, 0, 10);
-        return new BaseDelegateAdapter(activity, linearLayoutHelper, R.layout.item_news_base_view, showNum, ViewType.TYPE_TITLE_IMAGE_SMALL) {
+        //linearLayoutHelper.setAspectRatio(4.0f);
+        //linearLayoutHelper.setDividerHeight(5);
+        linearLayoutHelper.setMargin(0, 0, 0, 10);
+        linearLayoutHelper.setPadding(0, 0, 0, 0);
+
+        return new BaseDelegateAdapter(activity, linearLayoutHelper, R.layout.vlayout_title_summary_image_small, showNum, ViewType.TYPE_TITLE_IMAGE_SMALL) {
             @Override
             public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
@@ -252,7 +252,7 @@ public class NewsVideoListFragment extends Fragment {
 //        onePlusNLayoutHelper.setPadding(10, 20, 10, 10);
 
 
-        return new BaseDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.view_vlayout_img_big, bean.getShowNum(), ViewType.TYPE_TITLE_IMAGE_BIG) {
+        return new BaseDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.vlayout_title_summary_image_big, bean.getShowNum(), ViewType.TYPE_TITLE_IMAGE_BIG) {
             @Override
             public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
@@ -270,7 +270,7 @@ public class NewsVideoListFragment extends Fragment {
                     cover = contentBean.getCover();
                 }
 
-                holder.setText(R.id.tv_summary, title + "  " + summary);
+                holder.setText(R.id.tv_summary, title + " \n " + summary);
                 ImageView iv = holder.getView(R.id.iv_big);
                 ImageLoader.get().loadImage(iv, cover);
 
@@ -300,18 +300,20 @@ public class NewsVideoListFragment extends Fragment {
         //gridLayoutHelper.setAutoExpand(false);
         // 设置每行多少个网格
         //gridLayoutHelper.setSpanCount(6);
-        return new BaseDelegateAdapter(activity, gridLayoutHelper, R.layout.base_btn_title_view, showNum, ViewType.TYPE_TITLE_IMAGE_THREE) {
+        return new BaseDelegateAdapter(activity, gridLayoutHelper, R.layout.vlayout_title_image_three, showNum, ViewType.TYPE_TITLE_IMAGE_THREE) {
             @Override
             public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
-                final VideoListEntity.DataBean.ContentBean bean = contentList.get(position);
-                holder.setText(R.id.tv_title, bean.getTitle());
-                ImageView iv = holder.getView(R.id.iv_image);
-                ImageLoader.get().loadImage(iv, bean.getCover());
-                Objects.requireNonNull(holder.itemView).setOnClickListener(v -> {
-                    //点击事件
-                    Toast.makeText(activity, "position : " + position, Toast.LENGTH_SHORT).show();
-                });
+                if (contentList != null && !contentList.isEmpty() && position < contentList.size()) {
+                    final VideoListEntity.DataBean.ContentBean bean = contentList.get(position);
+                    holder.setText(R.id.tv_title, bean.getTitle());
+                    ImageView iv = holder.getView(R.id.iv_image);
+                    ImageLoader.get().loadImage(iv, bean.getCover());
+                    Objects.requireNonNull(holder.itemView).setOnClickListener(v -> {
+                        //点击事件
+                        Toast.makeText(activity, "position : " + position, Toast.LENGTH_SHORT).show();
+                    });
+                }
             }
         };
 

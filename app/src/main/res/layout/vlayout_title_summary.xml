@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
+    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <TextView
@@ -10,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="2"
-        android:padding="8dp"
+        android:padding="5dp"
         android:text="文本"
         android:textColor="@color/blackText1"
         android:textSize="16sp"
