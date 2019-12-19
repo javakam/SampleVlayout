@@ -4,7 +4,9 @@
 
 - 效果图
 
-![a1](art/a1.png)
-![a2](art/a2.png)
-![a3](art/a3.png)
-![a4](art/a4.png)
+
+![a1](art/a1.png)|![a2](art/a2.png)|![a3](art/a3.png)|![a4](art/a4.png)
+|:---:|:---:|:---:|:---:|
+
+
+
