@@ -198,8 +198,8 @@ public class NewsVideoListFragment extends Fragment {
         mRecyclerView.requestLayout();
     }
 
-    //防止数组越界 getSafeShowNum(bean.getContent(), bean.getShowNum())
-    private int getSafeShowNum(List<?> list, int showNum) {
+    //防止数组越界 safeShowNum(bean.getContent(), bean.getShowNum())
+    private static int safeShowNum(List<?> list, int showNum) {
         if (list == null || list.isEmpty() || showNum <= 0) {
             return 0;
         }
@@ -471,21 +471,25 @@ public class NewsVideoListFragment extends Fragment {
         gridLayoutHelper.setPadding(0, 10, 0, 10);
         gridLayoutHelper.setBgColor(Color.WHITE);
         //gridLayoutHelper.setAspectRatio(1.5f);  // 设置设置布局内每行布局的宽与高的比
-        // gridLayoutHelper特有属性（下面会详细说明）
-        //设置每行中 每个网格宽度 占 每行总宽度 的比例
-        gridLayoutHelper.setWeights(new float[]{30, 40, 30});
+        // gridLayoutHelper 特有属性（下面会详细说明）
+        //设置每行中 每个网格宽度 占 每行总宽度 的比例 ， 会和 setAutoExpand 冲突
+        //gridLayoutHelper.setWeights(new float[]{30, 30, 30});
+
         // 控制子元素之间的垂直间距
         gridLayoutHelper.setVGap(0);
         // 控制子元素之间的水平间距
         gridLayoutHelper.setHGap(5);
         //是否自动填充空白区域
-        //gridLayoutHelper.setAutoExpand(false);
+        gridLayoutHelper.setAutoExpand(true);
         // 设置每行多少个网格
         //gridLayoutHelper.setSpanCount(6);
-        return new BaseDelegateAdapter(activity, gridLayoutHelper, R.layout.vlayout_title_image_three, showNum, ViewType.TYPE_TITLE_IMAGE_THREE) {
+        return new BaseDelegateAdapter(activity, gridLayoutHelper, R.layout.vlayout_title_image_three, safeShowNum(contentList, showNum), ViewType.TYPE_TITLE_IMAGE_THREE) {
             @Override
             public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
+
+                //todo 2019年12月19日 22:17:29 去掉这层判断试一试
+
                 if (contentList != null && !contentList.isEmpty() && position < contentList.size()) {
                     final VideoListEntity.DataBean.ContentBean bean = contentList.get(position);
 
@@ -511,7 +515,7 @@ public class NewsVideoListFragment extends Fragment {
 
                     Objects.requireNonNull(holder.itemView).setOnClickListener(v -> {
                         //点击事件
-                        Toast.makeText(activity, "position : " + position, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "initList5  position : " + position, Toast.LENGTH_SHORT).show();
                     });
                 }
             }
@@ -538,7 +542,7 @@ public class NewsVideoListFragment extends Fragment {
 //                    Objects.requireNonNull(holder.getItemView()).setOnClickListener(v -> {
 //                        //点击事件
 //                        mView.setNewsList5Click(position,
-//                                Constant.findBottomNews.get(position).getUrl());
+//                                Constant.findBottomNews.get(position).getVideoUrl());
 //                    });
 //                } else {
 //                    ImageView imageView = holder.getView(R.id.iv_logo);

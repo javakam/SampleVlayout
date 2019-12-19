@@ -15,6 +15,7 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 
 import sample.vlayout.R;
+import sample.vlayout.bean.VideoBean;
 
 public class SeamlessRecyclerViewAdapter extends RecyclerView.Adapter<SeamlessRecyclerViewAdapter.VideoHolder> {
 
