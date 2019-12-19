@@ -28,10 +28,15 @@ import static com.google.android.exoplayer2.util.Util.inferContentType;
  * @date 2019/12/13  16:53
  */
 public class MyApplication extends Application {
+    private static MyApplication INSTANCE;
+
+    public static MyApplication get() {
+        return INSTANCE;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
-
+        INSTANCE=this;
 
         //GSYVideoType.enableMediaCodec();
         //GSYVideoType.enableMediaCodecTexture();

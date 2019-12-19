@@ -1,6 +1,59 @@
 {
   "data": [
     {
+      "id": 12,
+      "viewType": 7,
+      "title": "广告轮播图",
+      "showNum": 1,
+      "content": [
+        {
+          "title": "房子",
+          "dataType": 4,
+          "url": "https://www.bilibili.com/",
+          "cover": "http://img.mp.itc.cn/upload/20170410/fa5717799bfd4ff6a31da12c1bcdbd5a_th.jpg",
+          "coverBig": "http://img.mp.itc.cn/upload/20170410/fa5717799bfd4ff6a31da12c1bcdbd5a_th.jpg"
+        },
+        {
+          "title": "红叶",
+          "dataType": 5,
+          "url": "跳转到音频页面",
+          "cover": "http://bpic.wotucdn.com/11/66/23/55bOOOPIC3c_1024.jpg",
+          "coverBig": "http://bpic.wotucdn.com/11/66/23/55bOOOPIC3c_1024.jpg"
+        },
+        {
+          "title": "雪花",
+          "dataType": 6,
+          "url": "https://www.bilibili.com/video/av79331379?spm_id_from=333.851.b_7265706f7274466972737431.1",
+          "cover": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505470629546&di=194a9a92bfcb7754c5e4d19ff1515355&imgtype=0&src=http%3A%2F%2Fpics.jiancai.com%2Fimgextra%2Fimg01%2F656928666%2Fi1%2FT2_IffXdxaXXXXXXXX_%2521%2521656928666.jpg",
+          "coverBig": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505470629546&di=194a9a92bfcb7754c5e4d19ff1515355&imgtype=0&src=http%3A%2F%2Fpics.jiancai.com%2Fimgextra%2Fimg01%2F656928666%2Fi1%2FT2_IffXdxaXXXXXXXX_%2521%2521656928666.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1212,
+      "viewType": 8,
+      "title": "向上文字滚动效果",
+      "showNum": 1000,
+      "cover": "http://vod.zqrb.cn/image/cover/5FB218886F6C423681EFFF2CCD0CF645-6-2.png",
+      "content": [
+        {
+          "title": "第38家上市券商来了 中泰证券IP",
+          "dataType": 0,
+          "url": ""
+        },
+        {
+          "title": "首份央企分叉子公司挂牌科创板预案出炉",
+          "dataType": 0,
+          "url": ""
+        },
+        {
+          "title": "国务院关税税则委员会公布第一批",
+          "dataType": 0,
+          "url": ""
+        }
+      ]
+    },
+    {
       "id": 123,
       "viewType": 1,
       "title": "热点聚焦",
@@ -10,8 +63,8 @@
     {
       "id": 123,
       "viewType": 4,
+      "dataType": 1,
       "title": "热点聚焦",
-      "mediaType": 1,
       "showNum": 1,
       "content": [
         {
@@ -20,7 +73,7 @@
           "mediaId": "440a4e0dd61e443696bf1542020790fb",
           "mediaName": "",
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
-          "mediaType": 1,
+          "dataType": 1,
           "createtime": 1555663308,
           "updatetime": 1555663308,
           "commentNum": "1865",
@@ -37,7 +90,7 @@
             "SD": "http://vod.zqrb.cn/440a4e0dd61e443696bf1542020790fb/cad880d101f240b49b885534a7a88380-562c47b777a979b643ac8aaf0b35f5dd-sd.mp4",
             "HD": "http://vod.zqrb.cn/440a4e0dd61e443696bf1542020790fb/cad880d101f240b49b885534a7a88380-735fb9abede476e4feb1d74eddd2112f-hd.mp4",
             "OD": "http://vod.zqrb.cn/440a4e0dd61e443696bf1542020790fb/cad880d101f240b49b885534a7a88380-c4c94e7f4918122b433281461812ea8d-od-S00000001-200000.mp4",
-            "2K": "http://vod.zqrb.cn/440a4e0dd61e443696bf1542020790fb/cad880d101f240b49b885534a7a88380-dc40c6992b38fb9fd8654c9bec79b3ed-2k.mp4"
+            "K2": "http://vod.zqrb.cn/440a4e0dd61e443696bf1542020790fb/cad880d101f240b49b885534a7a88380-dc40c6992b38fb9fd8654c9bec79b3ed-2k.mp4"
           },
           "cover": "http://vod.zqrb.cn/image/cover/39ECDE4DE91E49109F6270B569E1D8C5-6-2.png",
           "coverBig": "http://vod.zqrb.cn/image/cover/39ECDE4DE91E49109F6270B569E1D8C5-6-2.png"
@@ -47,7 +100,7 @@
     {
       "id": 123,
       "viewType": 1,
-      "title": "高端访谈",
+      "title": "高端访谈(视频)",
       "more": false,
       "icon": ""
     },
@@ -55,7 +108,6 @@
       "id": 123,
       "viewType": 5,
       "title": "高端访谈",
-      "mediaType": 1,
       "showNum": 3,
       "content": [
         {
@@ -63,7 +115,7 @@
           "mediaId": "440a4e0dd61e443696bf1542020790fb",
           "mediaName": "",
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
-          "mediaType": 1,
+          "dataType": 1,
           "createtime": 1555663308,
           "updatetime": 1555663308,
           "commentNum": "1865",
@@ -90,7 +142,7 @@
           "mediaId": "02c010748072406081ccf26c5cef4a61",
           "mediaName": "",
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
-          "mediaType": 1,
+          "dataType": 1,
           "createtime": 1555663308,
           "updatetime": 1555663308,
           "commentNum": "1865",
@@ -117,7 +169,7 @@
           "mediaId": "157e21f555bd4f2b98941fd99626c70f",
           "mediaName": "",
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
-          "mediaType": 1,
+          "dataType": 1,
           "createtime": 1555663308,
           "updatetime": 1555663308,
           "commentNum": "1865",
@@ -149,7 +201,6 @@
       "id": 123,
       "viewType": 5,
       "title": "高端访谈(非视频)",
-      "mediaType": 0,
       "showNum": 3,
       "content": [
         {
@@ -157,6 +208,7 @@
           "title": "绿卡能成功登陆新三板",
           "mediaId": "440a4e0dd61e443696bf1542020790fb",
           "mediaName": "",
+          "dataType": 0,
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
           "createtime": 1555663308,
           "updatetime": 1555663308,
@@ -174,6 +226,7 @@
           "title": "里华机械挂牌新三板",
           "mediaId": "02c010748072406081ccf26c5cef4a61",
           "mediaName": "",
+          "dataType": 0,
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
           "createtime": 1555663308,
           "updatetime": 1555663308,
@@ -191,6 +244,77 @@
           "title": "总经理助理金小山",
           "mediaId": "157e21f555bd4f2b98941fd99626c70f",
           "mediaName": "",
+          "dataType": 0,
+          "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
+          "createtime": 1555663308,
+          "updatetime": 1555663308,
+          "commentNum": "1865",
+          "praiseNum": "98",
+          "shareNum": "786",
+          "authorId": "1212212",
+          "authorName": "逗你玩",
+          "categoryname": "新三板123",
+          "url": "",
+          "cover": "http://vod.zqrb.cn/157e21f555bd4f2b98941fd99626c70f/snapshots/312c9177bc9b454c88663cc1ef2716fb-00004.jpg"
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "viewType": 1,
+      "dataType": -1,
+      "title": "高端访谈(混合模式,图片,视频,音频...)",
+      "more": true,
+      "icon": ""
+    },
+    {
+      "id": 123,
+      "viewType": 5,
+      "title": "高端访谈(混合模式,图片,视频,音频...)",
+      "showNum": 3,
+      "content": [
+        {
+          "id": 123,
+          "title": "绿卡能成功登陆新三板",
+          "mediaId": "440a4e0dd61e443696bf1542020790fb",
+          "mediaName": "",
+          "dataType": 0,
+          "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
+          "createtime": 1555663308,
+          "updatetime": 1555663308,
+          "commentNum": "1865",
+          "praiseNum": "98",
+          "shareNum": "786",
+          "authorId": "1212212",
+          "authorName": "逗你玩",
+          "categoryname": "新三板123",
+          "url": "",
+          "cover": "http://vod.zqrb.cn/image/cover/39ECDE4DE91E49109F6270B569E1D8C5-6-2.png"
+        },
+        {
+          "id": 123,
+          "title": "里华机械挂牌新三板",
+          "mediaId": "02c010748072406081ccf26c5cef4a61",
+          "mediaName": "",
+          "dataType": 1,
+          "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
+          "createtime": 1555663308,
+          "updatetime": 1555663308,
+          "commentNum": "1865",
+          "praiseNum": "98",
+          "shareNum": "786",
+          "authorId": "1212212",
+          "authorName": "逗你玩",
+          "categoryname": "新三板123",
+          "url": "",
+          "cover": "http://vod.zqrb.cn/image/cover/816DCF7ECD184E849043C2DF22D00B76-6-2.png"
+        },
+        {
+          "id": 123,
+          "title": "总经理助理金小山",
+          "mediaId": "157e21f555bd4f2b98941fd99626c70f",
+          "mediaName": "",
+          "dataType": 2,
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
           "createtime": 1555663308,
           "updatetime": 1555663308,
@@ -218,7 +342,7 @@
       "title": "标题✔图片X",
       "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
       "more": true,
-      "mediaType": 0,
+      "dataType": 0,
       "url": "",
       "createtime": 1555663308,
       "updatetime": 1555663308,
@@ -236,7 +360,7 @@
       "title": "标题✔图片(小)✔",
       "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
       "more": true,
-      "mediaType": 0,
+      "dataType": 0,
       "url": "",
       "categoryname": "新三板123",
       "createtime": 1555663308,
@@ -255,7 +379,7 @@
       "title": "标题✔图片(大)✔",
       "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
       "more": true,
-      "mediaType": 0,
+      "dataType": 0,
       "url": "",
       "categoryname": "新三板123",
       "createtime": 1555663308,
@@ -279,7 +403,6 @@
       "id": 123,
       "viewType": 5,
       "title": "音频Item",
-      "mediaType": 2,
       "showNum": 3,
       "content": [
         {
@@ -288,7 +411,7 @@
           "mediaId": "440a4e0dd61e443696bf1542020790fb",
           "mediaName": "",
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
-          "mediaType": 2,
+          "dataType": 2,
           "createtime": 1555663308,
           "updatetime": 1555663308,
           "commentNum": "1865",
@@ -308,7 +431,7 @@
           "mediaId": "02c010748072406081ccf26c5cef4a61",
           "mediaName": "",
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
-          "mediaType": 2,
+          "dataType": 2,
           "createtime": 1555663308,
           "updatetime": 1555663308,
           "commentNum": "1865",
@@ -326,7 +449,7 @@
           "title": "总经理助理金小山",
           "mediaId": "157e21f555bd4f2b98941fd99626c70f",
           "mediaName": "",
-          "mediaType": 2,
+          "dataType": 2,
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
           "createtime": 1555663308,
           "updatetime": 1555663308,

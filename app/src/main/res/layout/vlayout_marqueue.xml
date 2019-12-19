@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:gravity="center_vertical"
+    android:minHeight="90dp"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/iv_vlayout_marqueue"
+        android:layout_width="80dp"
+        android:layout_height="75dp"
+        android:scaleType="fitCenter"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tv_vlayout_marqueue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        tools:text="蓝蓝的天上马儿跑,绿绿的草原白云飘"
+        android:textColor="@color/redTab"
+        android:textSize="14sp" />
+
+</LinearLayout>

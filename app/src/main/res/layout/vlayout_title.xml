@@ -8,19 +8,26 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="5dp"
+        android:layout_toStartOf="@id/tv_show_more"
         android:drawablePadding="10dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:padding="10dp"
         android:text="最新栏目"
-        android:textStyle="bold"
         android:textColor="@color/blackText1"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_show_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:drawableRight="@drawable/ic_back_right"
         android:gravity="center"

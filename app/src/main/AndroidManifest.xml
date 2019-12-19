@@ -58,11 +58,11 @@
             android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.zqrb.NewsVideoDetailActivity"
+            android:name=".ui.vlayout.NewsVideoDetailActivity"
             android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.zqrb.FragmentContainerActivity"
+            android:name=".ui.vlayout.FragmentContainerActivity"
             android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
 
