@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.PagerAdapter;
@@ -123,7 +125,7 @@ public class NewsVideoListFragment extends Fragment {
         //设置回收复用池大小，（如果一屏内相同类型的 View 个数比较多，需要设置一个合适的大小，防止来回滚动时重新创建 View）
         RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
         recyclerView.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(0, 10);
+        viewPool.setMaxRecycledViews(0, 20);
 
         //设置适配器
         DelegateAdapter delegateAdapter = new DelegateAdapter(layoutManager, true);
@@ -187,6 +189,12 @@ public class NewsVideoListFragment extends Fragment {
                     mAdapters.add(adapter);
                     break;
                 case ViewType.TYPE_TITLE_IMAGE_MANY:
+                    adapter = initList6(bean.getContent(), bean.getShowNum());
+                    mAdapters.add(adapter);
+                    break;
+                case ViewType.TYPE_NINE_GRID:
+                    adapter = initGrid(bean.getContent(), bean.getShowNum(), bean.getGridRowCount());
+                    mAdapters.add(adapter);
                     break;
                 default:
                     break;
@@ -197,6 +205,7 @@ public class NewsVideoListFragment extends Fragment {
         delegateAdapter.setAdapters(mAdapters);
         mRecyclerView.requestLayout();
     }
+
 
     //防止数组越界 safeShowNum(bean.getContent(), bean.getShowNum())
     private static int safeShowNum(List<?> list, int showNum) {
@@ -554,5 +563,90 @@ public class NewsVideoListFragment extends Fragment {
 //        };
     }
 
+    private class HorViewHolder extends RecyclerView.ViewHolder {
+
+        public ImageView iv_image;
+
+        public HorViewHolder(@NonNull View itemView) {
+            super(itemView);
+            iv_image = itemView.findViewById(R.id.iv_image);
+        }
+    }
+
+    private BaseDelegateAdapter initList6(List<VideoListEntity.DataBean.ContentBean> content, final int showNum) {
+
+        return new BaseDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.vlayout_multi_images, 1, ViewType.TYPE_TITLE_IMAGE_MANY) {
+
+            @Override
+            public void onBindViewHolder(@NonNull BaseViewHolder holder,
+                                         @SuppressLint("RecyclerView") final int position) {
+                super.onBindViewHolder(holder, position);
+//                final int num = safeShowNum(content, showNum);
+//                final int finalShowNum = num > 5 ? 5 : num;
+
+                // SmartRefreshHorizontal refreshLayout = holder.getView(R.id.refreshLayout);
+                RecyclerView recyclerView = holder.getView(R.id.recyclerViewHor);
+                recyclerView.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false));
+                recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                    @Override
+                    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                        outRect.set(0, 0, 5, 0);
+                    }
+                });
+                recyclerView.setAdapter(new RecyclerView.Adapter<HorViewHolder>() {
+                    @NonNull
+                    @Override
+                    public HorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        return new HorViewHolder(getLayoutInflater().inflate(R.layout.vlayout_item_multi_images, parent, false));
+                    }
+
+                    @Override
+                    public void onBindViewHolder(@NonNull HorViewHolder holder, int position) {
+                        ImageLoader.get().loadImage(holder.iv_image, content.get(position).getCover());
+                    }
+
+                    @Override
+                    public int getItemCount() {
+                        return content == null || content.isEmpty() ? 0 : content.size();
+                    }
+                });
+
+                recyclerView.getAdapter().notifyDataSetChanged();
+
+            }
+        };
+    }
+
+
+    private BaseDelegateAdapter initGrid(List<VideoListEntity.DataBean.ContentBean> content, int showNum, int gridRowCount) {
+        final int num = safeShowNum(content, showNum);
+
+        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(gridRowCount);// 2 4
+        gridLayoutHelper.setBgColor(Color.WHITE);
+
+        gridLayoutHelper.setPadding(0, 12, 0, 12);
+        gridLayoutHelper.setVGap(10);
+        //gridLayoutHelper.setHGap(0);
+        gridLayoutHelper.setAutoExpand(true);
+
+        return new BaseDelegateAdapter(activity, gridLayoutHelper, R.layout.vlayout_item_grid_title_image, num, ViewType.TYPE_NINE_GRID) {
+            @Override
+            public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+                super.onBindViewHolder(holder, position);
+
+                final VideoListEntity.DataBean.ContentBean bean = content.get(position);
+
+                holder.setText(R.id.tv_new_seed_title, bean.getTitle());
+                ImageLoader.get().loadImage((ImageView) holder.getView(R.id.iv_new_seed_ic), content.get(position).getCover());
+
+                holder.getView(R.id.ll_new_seed_item).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(activity, "initGrid position " + position, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
+    }
 
 }

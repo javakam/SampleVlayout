@@ -74,12 +74,13 @@ public class VideoListEntity implements Serializable {
          * coverBig : http://vod.zqrb.cn/157e21f555bd4f2b98941fd99626c70f/snapshots/312c9177bc9b454c88663cc1ef2716fb-00004.jpg
          */
 
-        private int id;
+        private String id;
         private int viewType;
         private String title;
         private boolean more;
         private String icon;
         private int showNum;
+        private int gridRowCount;
         private String summary;
         private int dataType;
         private String url;
@@ -96,11 +97,11 @@ public class VideoListEntity implements Serializable {
         private String coverBig;
         private List<ContentBean> content;
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -142,6 +143,14 @@ public class VideoListEntity implements Serializable {
 
         public void setShowNum(int showNum) {
             this.showNum = showNum;
+        }
+
+        public int getGridRowCount() {
+            return gridRowCount;
+        }
+
+        public void setGridRowCount(int gridRowCount) {
+            this.gridRowCount = gridRowCount;
         }
 
         public String getSummary() {
@@ -287,7 +296,7 @@ public class VideoListEntity implements Serializable {
              * coverBig : http://vod.zqrb.cn/image/cover/39ECDE4DE91E49109F6270B569E1D8C5-6-2.png
              */
 
-            private int id;
+            private String id;
             private String title;
             private String mediaId;
             private String mediaName;
@@ -307,11 +316,11 @@ public class VideoListEntity implements Serializable {
             private String cover;
             private String coverBig;
 
-            public int getId() {
+            public String getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(String id) {
                 this.id = id;
             }
 

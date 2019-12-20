@@ -18,7 +18,8 @@ android {
 
         ndk {
             // 设置支持的 SO 库构架，注意这里要根据你的实际情况来设置
-            abiFilters 'x86','armeabi-v7a'//, 'x86'  'armeabi','x86_64', 'arm64-v8a', 'mips', 'mips64'
+            abiFilters 'armeabi-v7a'
+            //abiFilters 'x86','armeabi-v7a'//, 'x86'  'armeabi','x86_64', 'arm64-v8a', 'mips', 'mips64'
         }
     }
 
@@ -63,6 +64,7 @@ dependencies {
     implementation ('com.alibaba.android:vlayout:1.2.36@aar') {
         transitive = true
     }
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
 
     implementation 'com.google.code.gson:gson:2.8.6'
 //    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50"

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/refreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewHor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:fastScrollEnabled="false" />
+
+</FrameLayout>
+
+    <!--    <?xml version="1.0" encoding="utf-8"?>-->
+    <!--<sample.vlayout.widget.refresh.SmartRefreshHorizontal xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:id="@+id/refreshLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:srlEnableFooterTranslationContent="true"-->
+    <!--app:srlEnableHeaderTranslationContent="true"-->
+    <!--app:srlEnablePureScrollMode="true">-->
+
+    <!--<androidx.recyclerview.widget.RecyclerView-->
+    <!--    android:id="@+id/recyclerViewHor"-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:overScrollMode="never"-->
+    <!--    android:scrollbars="none"-->
+    <!--    app:fastScrollEnabled="false" />-->
+
+    <!--</sample.vlayout.widget.refresh.SmartRefreshHorizontal>-->
