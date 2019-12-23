@@ -11,7 +11,17 @@
         android:id="@+id/coverImageLayout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:cover="@drawable/selector_cover_video" />
+        app:cover="@drawable/selector_cover_video">
+
+<!--        <ImageView-->
+<!--            android:id="@+id/ivPlayerList"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:src="@drawable/video_click_play_selector" />-->
+
+    </sample.vlayout.ui.vlayout.CoverImageLayout>
+
 
     <TextView
         android:id="@+id/tv_summary"

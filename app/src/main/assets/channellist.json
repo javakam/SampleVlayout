@@ -1,0 +1,39 @@
+{
+  "data": [
+    {
+      "id": "267",
+      "node_name": "财经频道",
+      "fixed": true,
+      "parent_id": "1"
+    },
+    {
+      "id": "268",
+      "node_name": "基金频道",
+      "fixed": false,
+      "parent_id": "1"
+    },
+    {
+      "id": "531",
+      "node_name": "评论频道",
+      "fixed": false,
+      "parent_id": "1"
+    },
+    {
+      "id": "358",
+      "node_name": "新股提示",
+      "parent_id": "297"
+    },
+    {
+      "id": "359",
+      "node_name": "基金发行上市扩募提示",
+      "parent_id": "297"
+    },
+    {
+      "id": "360",
+      "node_name": "市场要闻点评",
+      "parent_id": "297"
+    }
+  ],
+  "msg": "请求成功",
+  "status": "OK"
+}

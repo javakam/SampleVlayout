@@ -91,8 +91,8 @@ public class CoverImageLayout extends FrameLayout {
         }
         coverImg.setVisibility(isCoverShow ? VISIBLE : GONE);
 
-        addView(backImg, 0);
-        addView(coverImg, 1);
+        addView(backImg);
+        addView(coverImg);
     }
 
     public void showCover() {

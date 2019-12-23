@@ -4,9 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,13 @@ import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.shuyu.gsyvideoplayer.utils.CommonUtil;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,8 +46,11 @@ import java.util.List;
 import java.util.Objects;
 
 import sample.vlayout.R;
+import sample.vlayout.bean.VideoBean;
 import sample.vlayout.ui.vlayout.adapter.BaseDelegateAdapter;
 import sample.vlayout.ui.vlayout.adapter.BaseViewHolder;
+import sample.vlayout.ui.vlayout.adapter.RecyclerBaseAdapter;
+import sample.vlayout.ui.vlayout.adapter.holder.RecyclerItemNormalHolder;
 import sample.vlayout.ui.vlayout.entity.VideoListEntity;
 import sample.vlayout.utils.AssetsUtils;
 import sample.vlayout.utils.GsonUtils;
@@ -102,6 +115,8 @@ public class NewsVideoListFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
 
         DelegateAdapter delegateAdapter = initRecyclerView(mRecyclerView);
+
+        initListVideoPlayer(mRecyclerView);
 
         initAdapters(delegateAdapter);
 
@@ -416,10 +431,9 @@ public class NewsVideoListFragment extends Fragment {
             @Override
             public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
-                String summary = "";
-                String cover = "";
+                String summary, cover, videoUrl = "";
                 int dataType;
-                if (bean.getDataType() == 0) {
+                if (bean.getDataType() == DataType.DEFAULT) {
                     summary = bean.getSummary();
                     cover = bean.getCover();
                     dataType = bean.getDataType();
@@ -428,17 +442,55 @@ public class NewsVideoListFragment extends Fragment {
                     summary = contentBean.getSummary();
                     cover = contentBean.getCover();
                     dataType = contentBean.getDataType();
+                    videoUrl = contentBean.getVideo().getSD();
                 }
 
-                //遮盖图
+                //动态添加播放器
                 final CoverImageLayout coverImageLayout = holder.getView(R.id.coverImageLayout);
+
+
+                switch (dataType) {
+                    case DataType.VIDEO:
+                        coverImageLayout.setCoverImg(R.drawable.selector_cover_video);
+                        //Log.w("123", "video  videoUrl " + videoUrl);
+
+                        if (TextUtils.isEmpty(videoUrl)) {
+                            break;
+                        }
+                        final String finalvideoUrl = videoUrl;
+
+
+
+                        smallVideoHelper.addVideoPlayer(position, coverImageLayout.getBackImg(), VIDEO_LIST_TAG, coverImageLayout, coverImageLayout.getCoverImg());
+
+
+                        coverImageLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(activity, "coverImageLayout", Toast.LENGTH_SHORT).show();
+
+
+                                notifyDataSetChanged();
+                                smallVideoHelper.setPlayPositionAndTag(position, VIDEO_LIST_TAG);
+
+                                // final String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+                                gsySmallVideoHelperBuilder
+                                        .setVideoTitle("title " + position)
+                                        .setUrl(finalvideoUrl);
+                                smallVideoHelper.startPlay();
+                            }
+                        });
+
+                        break;
+                    case DataType.AUDIO:
+                        coverImageLayout.setCoverImg(R.drawable.ic_cover_audio);
+                        break;
+                    default:
+                        coverImageLayout.hideCover();
+                        break;
+                }
+                //加载预览图
                 ImageLoader.get().loadImage(coverImageLayout.getBackImg(), cover);
-                coverImageLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(activity, "coverImageLayout", Toast.LENGTH_SHORT).show();
-                    }
-                });
 
 
                 TextView tvSummary = holder.getView(R.id.tv_summary);
@@ -449,29 +501,130 @@ public class NewsVideoListFragment extends Fragment {
                     public void onClick(View v) {
                         Toast.makeText(activity, "tvSummary", Toast.LENGTH_SHORT).show();
 
+
                     }
                 });
 
-                switch (dataType) {
-                    case DataType.VIDEO:
-                        coverImageLayout.setCoverImg(R.drawable.selector_cover_video);
-                        break;
-                    case DataType.AUDIO:
-                        coverImageLayout.setCoverImg(R.drawable.ic_cover_audio);
-                        break;
-                    default:
-                        coverImageLayout.hideCover();
-                        break;
-                }
 
-
-                Objects.requireNonNull(holder.itemView).setOnClickListener(v -> {
-                    //点击事件
-                    Toast.makeText(activity, "initList4 position : " + position, Toast.LENGTH_SHORT).show();
-                });
+//                Objects.requireNonNull(holder.itemView).setOnClickListener(v -> {
+//                    //点击事件
+//                    Toast.makeText(activity, "initList4 position : " + position, Toast.LENGTH_SHORT).show();
+//                });
             }
         };
     }
+
+    public static final String VIDEO_LIST_TAG = "VIDEO_LIST_TAG";
+    private GSYVideoHelper smallVideoHelper;
+    private GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
+
+
+    private void initListVideoPlayer(@NonNull final RecyclerView recyclerView) {
+
+        final VirtualLayoutManager layoutManager = (VirtualLayoutManager) recyclerView.getLayoutManager();
+
+        //创建小窗口帮助类
+        smallVideoHelper = new GSYVideoHelper(activity);
+
+        gsySmallVideoHelperBuilder = new GSYVideoHelper.GSYVideoHelperBuilder();
+        gsySmallVideoHelperBuilder
+                .setHideStatusBar(true)
+                .setNeedLockFull(true)
+                .setCacheWithPlay(true)
+                .setShowFullAnimation(false)
+                .setRotateViewAuto(false)
+                .setLockLand(true)
+                .setVideoAllCallBack(new GSYSampleCallBack() {
+                    @Override
+                    public void onQuitSmallWidget(String url, Object... objects) {
+                        super.onQuitSmallWidget(url, objects);
+                        if (layoutManager == null) {
+                            return;
+                        }
+
+                        //大于0说明有播放,//对应的播放列表TAG
+                        if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(VIDEO_LIST_TAG)) {
+                            //当前播放的位置
+                            int position = smallVideoHelper.getPlayPosition();
+                            Log.e("123", "onQuitSmallWidget position " + position);
+
+                            //不可视的是时候
+                            if ((position < layoutManager.findFirstVisibleItemPosition() || position > layoutManager.findLastVisibleItemPosition())) {
+                                //释放掉视频
+                                smallVideoHelper.releaseVideoPlayer();
+                                if (recyclerView.getAdapter() != null) {
+                                    recyclerView.getAdapter().notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    }
+                });
+
+        smallVideoHelper.setGsyVideoOptionBuilder(gsySmallVideoHelperBuilder);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+//                SimpleListVideoActivityMode2.this.firstVisibleItem = firstVisibleItem;
+//                lastVisibleItem = firstVisibleItem + visibleItemCount;
+
+                if (layoutManager == null) {
+                    return;
+                }
+
+                //大于0说明有播放,//对应的播放列表TAG
+                if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(VIDEO_LIST_TAG)) {
+                    //当前播放的位置
+                    int position = smallVideoHelper.getPlayPosition();
+                    Log.e("123", "onScrolled position " + position);
+                    //不可视的是时候
+                    if ((position < layoutManager.findFirstVisibleItemPosition() || position > layoutManager.findLastCompletelyVisibleItemPosition())) {
+                        //如果是小窗口就不需要处理
+                        if (!smallVideoHelper.isSmall()) {
+                            //小窗口
+                            int size = CommonUtil.dip2px(activity, 160);
+                            smallVideoHelper.showSmallVideo(new Point(size + 50, size), false, true);
+                        }
+                    } else {
+                        if (smallVideoHelper.isSmall()) {
+                            smallVideoHelper.smallVideoToNormal();
+                        }
+                    }
+                }
+            }
+
+        });
+
+//        //增加title
+//        videoPlayer.getTitleTextView().setVisibility(View.GONE);
+//
+//        //设置返回键
+//        videoPlayer.getBackButton().setVisibility(View.GONE);
+//
+//        //设置全屏按键功能
+//        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                resolveFullBtn(videoPlayer);
+//            }
+//        });
+    }
+
+    /**
+     * 全屏幕按键处理
+     */
+    private void resolveFullBtn(final StandardGSYVideoPlayer standardGSYVideoPlayer) {
+        standardGSYVideoPlayer.startWindowFullscreen(activity, true, true);
+    }
+
 
     public BaseDelegateAdapter initList5(List<VideoListEntity.DataBean.ContentBean> contentList, int showNum) {
 
@@ -648,5 +801,81 @@ public class NewsVideoListFragment extends Fragment {
             }
         };
     }
+
+    List<VideoBean> dataList = new ArrayList<>();
+    RecyclerBaseAdapter recyclerBaseAdapter;
+
+    public void bindVideoPlayer(@NotNull RecyclerView recyclerView) {
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            int firstVisibleItem, lastVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(@NotNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                final VirtualLayoutManager layoutManager = (VirtualLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager == null) {
+                    return;
+                }
+
+                firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                //大于0说明有播放
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                    //当前播放的位置
+                    int position = GSYVideoManager.instance().getPlayPosition();
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
+                            && (position < firstVisibleItem || position > lastVisibleItem)) {
+                        //如果滑出去了上面和下面就是否，和今日头条一样
+                        if (!GSYVideoManager.isFullState(activity)) {
+                            GSYVideoManager.releaseAllVideos();
+                            if (mRecyclerView.getAdapter() != null) {
+                                mRecyclerView.getAdapter().notifyDataSetChanged();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void onBackPressed() {
+        if (smallVideoHelper != null && smallVideoHelper.backFromFull()) {
+            return;
+        }
+        if (GSYVideoManager.backFromWindowFull(getActivity())) {
+            return;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GSYVideoManager.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (smallVideoHelper != null) {
+            smallVideoHelper.releaseVideoPlayer();
+        }
+        GSYVideoManager.releaseAllVideos();
+    }
+
 
 }
