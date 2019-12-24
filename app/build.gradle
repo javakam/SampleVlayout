@@ -54,6 +54,12 @@ dependencies {
     //更多配置版so，增加了concat,rtsp,mpeg，crypto
     implementation "com.shuyu:gsyVideoPlayer-ex_so:$gsyVideoVersion"
 
+//    implementation "com.shuyu:gsyVideoPlayer-armv5:$gsyVideoVersion"
+//    implementation "com.shuyu:gsyVideoPlayer-armv7a:$gsyVideoVersion"
+//    implementation "com.shuyu:gsyVideoPlayer-arm64:$gsyVideoVersion"
+//    implementation "com.shuyu:gsyVideoPlayer-x64:$gsyVideoVersion"
+//    implementation "com.shuyu:gsyVideoPlayer-x86:$gsyVideoVersion"
+
     //
     implementation "com.google.android.material:material:1.0.0"
     implementation "androidx.recyclerview:recyclerview:1.1.0"

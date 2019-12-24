@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
@@ -54,18 +55,25 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
     }
 
     @Override
-    public void onViewDetachedFromWindow(@NotNull BaseViewHolder holder) {
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
 
-        smallVideoHelper.releaseVideoPlayer();
+    @Override
+    public void onViewDetachedFromWindow(@NotNull BaseViewHolder holder) {
+        if (true) {
+            return;
+        }
+        // smallVideoHelper.releaseVideoPlayer();
         super.onViewDetachedFromWindow(holder);
     }
 
     @Override
     public void onViewAttachedToWindow(@NotNull BaseViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        if (smallVideoHelper.isSmall()) {
-            smallVideoHelper.smallVideoToNormal();
-        }
+//        if (smallVideoHelper.isSmall()) {
+//            smallVideoHelper.smallVideoToNormal();
+//        }
     }
 
     @Override
@@ -158,11 +166,10 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
 //                            }
 //                        });
 
-
                 //GSYPlayer
                 smallVideoHelper.addVideoPlayer(finalPosition, coverImageLayout.getBackImg(), VIDEO_LIST_TAG, coverImageLayout, coverImageLayout.getCoverImg());
 
-                smallVideoHelper.setPlayPositionAndTag(finalPosition, VIDEO_LIST_TAG);
+                //smallVideoHelper.setPlayPositionAndTag(finalPosition, VIDEO_LIST_TAG);
 
                 coverImageLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
