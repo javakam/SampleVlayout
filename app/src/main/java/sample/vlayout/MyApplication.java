@@ -2,12 +2,14 @@ package sample.vlayout;
 
 import android.app.Application;
 import android.net.Uri;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+
 import java.io.File;
 
 import sample.vlayout.source.CustomSourceTag;
@@ -37,6 +39,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         INSTANCE=this;
+
+        initDKPlayer();
 
         //GSYVideoType.enableMediaCodec();
         //GSYVideoType.enableMediaCodecTexture();
@@ -71,5 +75,41 @@ public class MyApplication extends Application {
         });
 
 
+    }
+
+    private void initDKPlayer() {
+//        VideoViewManager.setConfig(VideoViewConfig.newBuilder()
+//                //使用使用IjkPlayer解码
+//                //.setPlayerFactory(IjkPlayerFactory.create())
+//                //使用ExoPlayer解码
+//                .setPlayerFactory(ExoMediaPlayerFactory.create())
+//                //使用MediaPlayer解码
+//                //.setPlayerFactory(AndroidMediaPlayerFactory.create())
+//                .build());
+
+        //如果您想使用默认的网络状态事件生产者，请添加此行配置。
+        //并需要添加权限 android.permission.ACCESS_NETWORK_STATE
+//        PlayerConfig.setUseDefaultNetworkEventProducer(true);
+//        //初始化库
+//        PlayerLibrary.init(this);
+//
+//        //-------------------------------------------
+//
+//        //如果添加了'cn.jiajunhui:exoplayer:xxxx'该依赖
+////        ExoMediaPlayer.init(this);
+//
+//        //如果添加了'cn.jiajunhui:ijkplayer:xxxx'该依赖
+//        IjkPlayer.init(this);
+//
+//
+//        //播放记录的配置
+//        //开启播放记录
+//        PlayerConfig.playRecord(true);
+//        PlayRecordManager.setRecordConfig(
+//                new PlayRecordManager.RecordConfig.Builder()
+//                        .setMaxRecordCount(100)
+//                        //.setRecordKeyProvider()
+//                        //.setOnRecordCallBack()
+//                        .build());
     }
 }

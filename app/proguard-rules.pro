@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keepattributes InnerClasses
+-keep class com.alibaba.android.vlayout.ExposeLinearLayoutManagerEx { *; }
+-keep class android.support.v7.widget.RecyclerView$LayoutParams { *; }
+-keep class android.support.v7.widget.RecyclerView$ViewHolder { *; }
+-keep class android.support.v7.widget.ChildHelper { *; }
+-keep class android.support.v7.widget.ChildHelper$Bucket { *; }
+-keep class android.support.v7.widget.RecyclerView$LayoutManager { *; }
