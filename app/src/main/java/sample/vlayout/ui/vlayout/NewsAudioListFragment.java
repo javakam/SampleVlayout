@@ -122,7 +122,7 @@ public class NewsAudioListFragment extends Fragment {
 
         BannerDelegateAdapter adapter = new BannerDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.vlayout_banner, 1, ViewType.TYPE_BANNER);
 //        adapter.setData(content);
-        delegateAdapter.setAdapters();
+//        delegateAdapter.setAdapters();
 
         return view;
     }
