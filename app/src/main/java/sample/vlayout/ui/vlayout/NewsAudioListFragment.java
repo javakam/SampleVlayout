@@ -28,7 +28,10 @@ import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.alibaba.android.vlayout.layout.ScrollFixLayoutHelper;
 import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
+
 import sample.vlayout.R;
+import sample.vlayout.ui.vlayout.adapter.BannerDelegateAdapter;
+import sample.vlayout.ui.vlayout.entity.VideoListEntity;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -55,6 +58,7 @@ public class NewsAudioListFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     private Activity activity;
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -84,19 +88,14 @@ public class NewsAudioListFragment extends Fragment {
         });
 
         mRecyclerView = view.findViewById(R.id.recyclerView);
-        mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setHasFixedSize(true);
+//        mRecyclerView.setItemAnimator(null);
+//        mRecyclerView.setHasFixedSize(true);
 
 
 //        if (true) {
 //            test2();
 //            return view ;
 //        }
-
-
-        VirtualLayoutManager layoutManager = new VirtualLayoutManager(activity);
-
-        mRecyclerView.setLayoutManager(layoutManager);
 
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -105,159 +104,27 @@ public class NewsAudioListFragment extends Fragment {
             }
         });
 
-        final List<LayoutHelper> helpers = new LinkedList<>();
+        VirtualLayoutManager layoutManager = new VirtualLayoutManager(activity);
+        mRecyclerView.setLayoutManager(layoutManager);
 
-        final GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(6);
-        gridLayoutHelper.setItemCount(25);
+        RecyclerView.RecycledViewPool pool = new RecyclerView.RecycledViewPool();
+        pool.setMaxRecycledViews(0, 10);
+        pool.setMaxRecycledViews(1, 10);
+
+        mRecyclerView.setLayoutManager(layoutManager);
 
 
-        final int specialPosition = 7;
-        final ScrollFixLayoutHelper scrollFixLayoutHelper = new ScrollFixLayoutHelper(TOP_RIGHT, 100, 100);
-
-        helpers.add(DefaultLayoutHelper.newHelper(specialPosition));
-        helpers.add(scrollFixLayoutHelper);
-        helpers.add(DefaultLayoutHelper.newHelper(2));
-        helpers.add(gridLayoutHelper);
-
-        layoutManager.setLayoutHelpers(helpers);
-
-        mRecyclerView.setAdapter(
-                new VirtualLayoutAdapter(layoutManager) {
-                    @Override
-                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                        return new MainViewHolder(new TextView(activity));
-                    }
-
-                    @Override
-                    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                        VirtualLayoutManager.LayoutParams layoutParams = new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300);
-                        holder.itemView.setLayoutParams(layoutParams);
-
-                        ((TextView) holder.itemView).setText(Integer.toString(position));
-
-                        if (position == specialPosition) {
-                            layoutParams.height = 60;
-                            layoutParams.width = 60;
-                        } else if (position > 35) {
-                            layoutParams.height = 200 + (position - 30) * 100;
-                        }
-
-                        if (position > 35) {
-                            holder.itemView.setBackgroundColor(0x66cc0000 + (position - 30) * 128);
-                        } else if (position % 2 == 0) {
-                            holder.itemView.setBackgroundColor(0xaa00ff00);
-                        } else {
-                            holder.itemView.setBackgroundColor(0xccff00ff);
-                        }
-                    }
-
-                    @Override
-                    public int getItemCount() {
-                        List<LayoutHelper> helpers = getLayoutHelpers();
-                        if (helpers == null) {
-                            return 0;
-                        }
-                        int count = 0;
-                        for (int i = 0, size = helpers.size(); i < size; i++) {
-                            count += helpers.get(i).getItemCount();
-                        }
-                        return count;
-                    }
-                });
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mRecyclerView.scrollToPosition(specialPosition);
-                mRecyclerView.getAdapter().notifyDataSetChanged();
-            }
-        }, 3000);
-        return view;
-    }
-
-    private void test2() {
-        VirtualLayoutManager virtualLayoutManager = new VirtualLayoutManager(activity);
-        DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
-        List<DelegateAdapter.Adapter> adapterList = new ArrayList<>();
-        adapterList.add(new SubAdapter(new LinearLayoutHelper(20), 20));
-        adapterList.add(new SubAdapter(new StickyLayoutHelper(true), 1));
-        adapterList.add(new SubAdapter(new LinearLayoutHelper(20), 20));
-        adapterList.add(new SubAdapter(new StickyLayoutHelper(true), 1));
-        adapterList.add(new SubAdapter(new GridLayoutHelper(4), 80));
-        // adapterList.add(new SubAdapter(new FixLayoutHelper(0, 0), 1));
-        adapterList.add(new SubAdapter(new FixLayoutHelper(TOP_RIGHT, 0, 0), 1));
-        delegateAdapter.addAdapters(adapterList);
-        mRecyclerView.setLayoutManager(virtualLayoutManager);
+        //设置适配器
+        //https://github.com/alibaba/vlayout/blob/master/docs/VLayoutFAQ.md
+        //注意：当hasConsistItemType=true的时候，不论是不是属于同一个子adapter，相同类型的item都能复用。表示它们共享一个类型。 当hasConsistItemType=false的时候，不同子adapter之间的类型不共享
+        DelegateAdapter delegateAdapter = new DelegateAdapter(layoutManager, false);
         mRecyclerView.setAdapter(delegateAdapter);
-    }
 
-    static class MainViewHolder extends RecyclerView.ViewHolder {
+        BannerDelegateAdapter adapter = new BannerDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.vlayout_banner, 1, ViewType.TYPE_BANNER);
+//        adapter.setData(content);
+        delegateAdapter.setAdapters();
 
-        public MainViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    static class SubAdapter extends DelegateAdapter.Adapter<SubViewHolder> {
-
-        private LayoutHelper mLayoutHelper;
-        private int mItemCount;
-
-        private SubAdapter(LayoutHelper layoutHelper, int itemCount) {
-            mLayoutHelper = layoutHelper;
-            mItemCount = itemCount;
-        }
-
-        @Override
-        public LayoutHelper onCreateLayoutHelper() {
-            return mLayoutHelper;
-        }
-
-        @Override
-        public SubViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            return new SubViewHolder(inflater.inflate(R.layout.item, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(SubViewHolder holder, int position) {
-            // do nothing
-        }
-
-        @Override
-        protected void onBindViewHolderWithOffset(SubViewHolder holder, int position, int offsetTotal) {
-            super.onBindViewHolderWithOffset(holder, position, offsetTotal);
-            holder.setText(String.valueOf(offsetTotal));
-            holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mItemCount;
-        }
-
-    }
-
-    static class SubViewHolder extends RecyclerView.ViewHolder {
-
-        public static volatile int existing = 0;
-        public static int createdTimes = 0;
-
-        public SubViewHolder(View itemView) {
-            super(itemView);
-            createdTimes++;
-            existing++;
-        }
-
-        public void setText(String title) {
-            ((TextView) itemView.findViewById(R.id.title)).setText(title);
-        }
-
-        @Override
-        protected void finalize() throws Throwable {
-            existing--;
-            super.finalize();
-        }
+        return view;
     }
 
 }

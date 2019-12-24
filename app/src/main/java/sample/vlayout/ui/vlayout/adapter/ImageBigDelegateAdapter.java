@@ -61,9 +61,6 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
 
     @Override
     public void onViewDetachedFromWindow(@NotNull BaseViewHolder holder) {
-        if (true) {
-            return;
-        }
         // smallVideoHelper.releaseVideoPlayer();
         super.onViewDetachedFromWindow(holder);
     }
