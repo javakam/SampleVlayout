@@ -40,12 +40,14 @@ public class MultiItemsHorAdapter extends BaseDelegateAdapter {
     public MultiItemsHorAdapter(Context context, LayoutHelper layoutHelper, int layoutId, int count, int viewTypeItem) {
         super(context, layoutHelper, layoutId, count, viewTypeItem);
     }
+
     @Override
     public void onViewRecycled(@NonNull BaseViewHolder holder) {
         super.onViewRecycled(holder);
-       // Toast.makeText(mContext, "MultiItemsHorAdapter 被回收 ", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(mContext, "MultiItemsHorAdapter 被回收 ", Toast.LENGTH_SHORT).show();
         //recyclerView.getRecycledViewPool().getRecycledViewCount(ViewType.TYPE_BANNER)
     }
+
     public void setData(List<VideoListEntity.DataBean.ContentBean> content) {
         this.content = content;
     }

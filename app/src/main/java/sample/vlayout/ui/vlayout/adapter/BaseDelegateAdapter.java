@@ -40,6 +40,7 @@ public class BaseDelegateAdapter extends DelegateAdapter.Adapter<BaseViewHolder>
         return mLayoutHelper;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,7 +52,6 @@ public class BaseDelegateAdapter extends DelegateAdapter.Adapter<BaseViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-
     }
 
     /**
@@ -82,4 +82,5 @@ public class BaseDelegateAdapter extends DelegateAdapter.Adapter<BaseViewHolder>
     public int getItemCount() {
         return mCount;
     }
+
 }

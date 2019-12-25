@@ -3,6 +3,7 @@ package sample.vlayout.ui.vlayout;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -29,18 +31,23 @@ import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
-import com.shuyu.gsyvideoplayer.utils.CommonUtil;
-import com.shuyu.gsyvideoplayer.utils.Debuger;
-import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.dueeeke.videocontroller.StandardVideoController;
+import com.dueeeke.videocontroller.component.CompleteView;
+import com.dueeeke.videocontroller.component.ErrorView;
+import com.dueeeke.videocontroller.component.GestureView;
+import com.dueeeke.videocontroller.component.PrepareView;
+import com.dueeeke.videocontroller.component.TitleView;
+import com.dueeeke.videocontroller.component.VodControlView;
+import com.dueeeke.videoplayer.player.VideoView;
+import com.tmall.wireless.tangram.util.Utils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 import sample.vlayout.R;
+import sample.vlayout.bean.VideoBean;
 import sample.vlayout.ui.vlayout.adapter.BannerDelegateAdapter;
 import sample.vlayout.ui.vlayout.adapter.BaseDelegateAdapter;
 import sample.vlayout.ui.vlayout.adapter.BaseViewHolder;
@@ -78,7 +85,13 @@ public class NewsVideoListFragment extends Fragment {
     private LinkedList<DelegateAdapter.Adapter> mAdapters;
     //
     private List<VideoListEntity.DataBean> mData;
-    private RecyclerView.RecycledViewPool recyclerPool;
+
+    //
+    private VideoView mVideoView;
+    private StandardVideoController mController;
+    private List<VideoBean> mVideos;
+    private TitleView mTitleView;
+    private int mCurPos = -1;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -115,10 +128,9 @@ public class NewsVideoListFragment extends Fragment {
         DelegateAdapter delegateAdapter = initRecyclerView();
 
 //        initListDKVideoPlayer(mRecyclerView);
-        initListVideoPlayer(mRecyclerView);
+        initListVideoPlayer();
 
         initAdapters(delegateAdapter);
-
 
         return view;
     }
@@ -133,25 +145,24 @@ public class NewsVideoListFragment extends Fragment {
 //        });
 
         //设置回收复用池大小，（如果一屏内相同类型的 View 个数比较多，需要设置一个合适的大小，防止来回滚动时重新创建 View）
-        recyclerPool = new RecyclerView.RecycledViewPool();
-        mRecyclerView.setRecycledViewPool(recyclerPool);
+        RecyclerView.RecycledViewPool pool = new RecyclerView.RecycledViewPool();
+        mRecyclerView.setRecycledViewPool(pool);
 
-        recyclerPool.setMaxRecycledViews(0, 10);
-        recyclerPool.setMaxRecycledViews(1, 10);
-        recyclerPool.setMaxRecycledViews(2, 10);
-        recyclerPool.setMaxRecycledViews(3, 10);
-        recyclerPool.setMaxRecycledViews(4, 10);
-        recyclerPool.setMaxRecycledViews(5, 10);
-        recyclerPool.setMaxRecycledViews(6, 10);
-        recyclerPool.setMaxRecycledViews(7, 10);
-        recyclerPool.setMaxRecycledViews(8, 10);
-        recyclerPool.setMaxRecycledViews(9, 10);
-        recyclerPool.setMaxRecycledViews(10, 10);
+        pool.setMaxRecycledViews(0, 10);
+        pool.setMaxRecycledViews(1, 10);
+        pool.setMaxRecycledViews(2, 10);
+        pool.setMaxRecycledViews(3, 10);
+        pool.setMaxRecycledViews(4, 10);
+        pool.setMaxRecycledViews(5, 10);
+        pool.setMaxRecycledViews(6, 10);
+        pool.setMaxRecycledViews(7, 10);
+        pool.setMaxRecycledViews(8, 10);
+        pool.setMaxRecycledViews(9, 10);
+        pool.setMaxRecycledViews(10, 10);
 
         //创建VirtualLayoutManager对象
         VirtualLayoutManager layoutManager = new VirtualLayoutManager(activity);
 //        layoutManager.setPerformanceMonitor(new PerformanceMonitor() {
-//
 //            long start;
 //            long end;
 //
@@ -207,6 +218,37 @@ public class NewsVideoListFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(layoutManager);
 
+        mRecyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                if (view.getTag() == null) {
+                    return;
+                }
+//                ImageBigDelegateAdapter holder = (ImageBigDelegateAdapter) view.getTag();
+//                int position = holder.position;
+                BaseViewHolder holder= (BaseViewHolder) view.getTag();
+                int position = holder.absolutePosition;
+                if (position == mCurPos) {
+                    startPlay(position, false);
+                }
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                if (view.getTag() == null) {
+                    return;
+                }
+//                ImageBigDelegateAdapter holder = (ImageBigDelegateAdapter) view.getTag();
+//                int position = holder.position;
+                BaseViewHolder holder= (BaseViewHolder) view.getTag();
+                int position = holder.absolutePosition;
+                if (position == mCurPos && !mVideoView.isFullScreen()) {
+                    mVideoView.startTinyScreen();
+                    mVideoView.setVideoController(null);
+                    mController.setPlayState(VideoView.STATE_IDLE);
+                }
+            }
+        });
 
         //设置适配器
         //https://github.com/alibaba/vlayout/blob/master/docs/VLayoutFAQ.md
@@ -237,6 +279,7 @@ public class NewsVideoListFragment extends Fragment {
     标题+三个小图音频 5		mediaType=2
     */
     private void initAdapters(DelegateAdapter delegateAdapter) {
+        mVideos=new ArrayList<>();
         final List<VideoListEntity.DataBean> data = mData;
         BaseDelegateAdapter adapter = null;
 
@@ -434,113 +477,40 @@ public class NewsVideoListFragment extends Fragment {
 //        onePlusNLayoutHelper.setMargin(0, 0, 0, 0);
 //        onePlusNLayoutHelper.setPadding(10, 20, 10, 10);
 
-        ImageBigDelegateAdapter adapter = new ImageBigDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.vlayout_title_summary_image_big, bean.getShowNum(), ViewType.TYPE_TITLE_IMAGE_BIG);
-        adapter.setData(bean, smallVideoHelper);
+        ImageBigDelegateAdapter adapter = new ImageBigDelegateAdapter(activity, new LinearLayoutHelper(),
+                R.layout.vlayout_title_summary_image_big, bean.getShowNum(), ViewType.TYPE_TITLE_IMAGE_BIG);
+
+        if (bean.getDataType() == DataType.VIDEO) {
+           if (bean.getContent()!=null){
+               for (VideoListEntity.DataBean.ContentBean c : bean.getContent()) {
+                   VideoBean videoBean=new VideoBean();
+                   videoBean.setTitle(c.getTitle());
+                   videoBean.setThumb(c.getCover());
+                   videoBean.setAudioUrl(c.getAudio());
+                   videoBean.setVideoUrl(c.getVideo().getSD());
+                   mVideos.add(videoBean);
+               }
+           }
+        }
+        final int finalDataType = bean.getDataType();
+
+
+        adapter.setCallBack(new ImageBigDelegateAdapter.CallBack() {
+            @Override
+            public void call(int position, int finalPosition) {
+                startPlay(finalPosition, true);
+            }
+        });
+
+        adapter.setData(bean);
         return adapter;
     }
 
-    private GSYVideoHelper smallVideoHelper;
-    private GSYVideoHelper.GSYVideoHelperBuilder gsySmallVideoHelperBuilder;
-    private int lastVisibleItem, firstVisibleItem;
-
-//    private StandardVideoController mController;
-//    private VideoView mVideoView;
-//    private TitleView mTitleView;
-//    private int mCurPos = -1;
-
-//    private void initListDKVideoPlayer(@NonNull final RecyclerView recyclerView) {
-//        mVideoView = new VideoView(activity);
-//        mVideoView.setOnStateChangeListener(new VideoView.SimpleOnStateChangeListener() {
-//            @Override
-//            public void onPlayStateChanged(int playState) {
-//                if (playState == VideoView.STATE_PLAYBACK_COMPLETED) {
-//                    if (mVideoView.isTinyScreen()) {
-//                        mVideoView.stopTinyScreen();
-//                        releaseVideoView();
-//                    }
-//                }
-//            }
-//        });
-//        mController = new StandardVideoController(activity);
-//
-//        //addControlComponent();
-//        CompleteView completeView = new CompleteView(activity);
-//        ErrorView errorView = new ErrorView(activity);
-//        mTitleView = new TitleView(activity);
-//        mController.addControlComponent(completeView, errorView, mTitleView);
-//        mController.addControlComponent(new VodControlView(activity));
-//        mController.addControlComponent(new GestureView(activity));
-//
-//
-//        recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
-//            @Override
-//            public void onChildViewAttachedToWindow(@NonNull View view) {
-//                if (view.getTag() == null) {
-//                    return;
-//                }
-//                int position = (int) view.getTag();
-//                if (position == mCurPos) {
-//                    startPlay(position, false);
-//                }
-//            }
-//
-//            @Override
-//            public void onChildViewDetachedFromWindow(@NonNull View view) {
-//                if (view.getTag() == null) {
-//                    return;
-//                }
-//                int position = (int) view.getTag();
-//                if (position == mCurPos && !mVideoView.isFullScreen()) {
-//                    mVideoView.startTinyScreen();
-//                    mVideoView.setVideoController(null);
-//                    mController.setPlayState(VideoView.STATE_IDLE);
-//                }
-//            }
-//        });
-//    }
-
-    /**
-     * 开始播放
-     *
-     * @param position 列表位置
-     */
-    protected void startPlay(int position, boolean isRelease) {
-//        if (mVideoView.isTinyScreen()) {
-//            mVideoView.stopTinyScreen();
-//        }
-//        if (mCurPos != -1 && isRelease) {
-//            releaseVideoView();
-//        }
-//        mVideoView.setUrl(videoBean.getUrl());
-//        mTitleView.setTitle(videoBean.getTitle());
-//
-//        //注意：要先设置控制才能去设置控制器的状态。
-//        mVideoView.setVideoController(mController);
-//        mController.setPlayState(mVideoView.getCurrentPlayState());
-//
-//        //把列表中预置的PrepareView添加到控制器中，注意isPrivate此处只能为true。
-//        mController.addControlComponent(viewHolder.mPrepareView, true);
-//        removeViewFormParent(mVideoView);
-//        viewHolder.mPlayerContainer.addView(mVideoView, 0);
-//        mVideoView.start();
-//        mCurPos = position;
-    }
-
-//    private void releaseVideoView() {
-//        mVideoView.release();
-//        if (mVideoView.isFullScreen()) {
-//            mVideoView.stopFullScreen();
-//        }
-//        if (activity.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-//            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        }
-//        mCurPos = -1;
-//    }
 
     /**
      * 将View从父控件中移除
      */
-    public static void removeViewFormParent(View v) {
+    private void removeViewFormParent(View v) {
         if (v == null) {
             return;
         }
@@ -551,167 +521,91 @@ public class NewsVideoListFragment extends Fragment {
     }
 
 
-    private void initListVideoPlayer(@NonNull final RecyclerView recyclerView) {
+    private void initListVideoPlayer() {
+        final VirtualLayoutManager layoutManager = (VirtualLayoutManager) mRecyclerView.getLayoutManager();
 
-        final VirtualLayoutManager layoutManager = (VirtualLayoutManager) recyclerView.getLayoutManager();
-
-        //创建小窗口帮助类
-        smallVideoHelper = new GSYVideoHelper(activity);
-        //smallVideoHelper.setFullViewContainer(videoFullContainer);
-
-
-        gsySmallVideoHelperBuilder = new GSYVideoHelper.GSYVideoHelperBuilder();
-        gsySmallVideoHelperBuilder
-                .setHideActionBar(true)
-                .setHideStatusBar(true)
-                .setNeedLockFull(true)
-                .setCacheWithPlay(true)
-                .setAutoFullWithSize(false)
-                .setShowFullAnimation(false)
-                .setRotateViewAuto(false)
-                .setLockLand(true)
-                .setVideoAllCallBack(new GSYSampleCallBack() {
-
-                    @Override
-                    public void onPrepared(String url, Object... objects) {
-                        super.onPrepared(url, objects);
-                        Debuger.printfLog("Duration " + smallVideoHelper.getGsyVideoPlayer().getDuration() + " CurrentPosition " + smallVideoHelper.getGsyVideoPlayer().getCurrentPositionWhenPlaying());
-                    }
-
-                    @Override
-                    public void onQuitSmallWidget(String url, Object... objects) {
-                        super.onQuitSmallWidget(url, objects);
-                        if (layoutManager == null) {
-                            return;
-                        }
-
-                        //大于0说明有播放,//对应的播放列表TAG
-                        if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(VIDEO_LIST_TAG)) {
-                            //当前播放的位置
-                            int position = smallVideoHelper.getPlayPosition();
-                            Log.e("123", "onQuitSmallWidget position " + position);
-                            //不可视的是时候
-                            if ((position < firstVisibleItem || position > lastVisibleItem)) {
-                                //释放掉视频
-                                smallVideoHelper.releaseVideoPlayer();
-                                if (recyclerView.getAdapter() != null) {
-                                    //recyclerView.getAdapter().notifyDataSetChanged();//
-                                    recyclerView.getAdapter().notifyItemChanged(position);
-                                }
-                            }
-                        }
-
-//                        //大于0说明有播放,//对应的播放列表TAG
-//                        if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(VIDEO_LIST_TAG)) {
-//                            //当前播放的位置
-//                            int position = smallVideoHelper.getPlayPosition();
-//                            Log.e("123", "onQuitSmallWidget position " + position);
-//
-//                            //不可视的是时候
-//                            if ((position < layoutManager.findFirstVisibleItemPosition() || position > layoutManager.findLastVisibleItemPosition())) {
-//                                //释放掉视频
-//                                smallVideoHelper.releaseVideoPlayer();
-//                                if (recyclerView.getAdapter() != null) {
-//                                    recyclerView.getAdapter().notifyDataSetChanged();
-//                                }
-//                            }
-//                        }
-                    }
-                });
-
-        smallVideoHelper.setGsyVideoOptionBuilder(gsySmallVideoHelperBuilder);
-
-//        recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
-//            @Override
-//            public void onChildViewAttachedToWindow(@NonNull View view) {
-//                if (view.getTag() == null) {
-//                    return;
-//                }
-//                int position = (int) view.getTag();
-//                if (position == mCurPos) {
-//                    startPlay(position, false);
-//                }
-//            }
-//
-//            @Override
-//            public void onChildViewDetachedFromWindow(@NonNull View view) {
-//                if (view.getTag() == null) {
-//                    return;
-//                }
-//                int position = (int) view.getTag();
-//                if (position == mCurPos && !mVideoView.isFullScreen()) {
-//                    mVideoView.startTinyScreen();
-//                    mVideoView.setVideoController(null);
-//                    mController.setPlayState(VideoView.STATE_IDLE);
-//                }
-//            }
-//        });
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
+        mVideoView = new VideoView(activity);
+        mVideoView.setOnStateChangeListener(new VideoView.SimpleOnStateChangeListener() {
             @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (layoutManager == null) {
-                    return;
-                }
-
-                firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
-                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
-                Log.i("123", "firstVisibleItem " + firstVisibleItem + " lastVisibleItem " + lastVisibleItem);
-                //大于0说明有播放,//对应的播放列表TAG
-                if (smallVideoHelper.getPlayPosition() >= 0 && smallVideoHelper.getPlayTAG().equals(VIDEO_LIST_TAG)) {
-                    //当前播放的位置
-                    int position = smallVideoHelper.getPlayPosition();
-                    Log.e("123", "onScrolled position " + position);
-                    //不可视的是时候
-                    if ((position < firstVisibleItem || position > lastVisibleItem)) {
-                        //如果是小窗口就不需要处理
-                        if (!smallVideoHelper.isSmall() && !smallVideoHelper.isFull()) {
-                            //小窗口
-                            int size = CommonUtil.dip2px(activity, 150);
-                            //actionbar为true才不会掉下面去
-                            smallVideoHelper.showSmallVideo(new Point(size + 30, size), true, true);
-                        }
-                    } else {
-                        if (smallVideoHelper.isSmall()) {
-                            smallVideoHelper.smallVideoToNormal();
-                        }
+            public void onPlayStateChanged(int playState) {
+                if (playState == VideoView.STATE_PLAYBACK_COMPLETED) {
+                    if (mVideoView.isTinyScreen()) {
+                        mVideoView.stopTinyScreen();
+                        releaseVideoView();
                     }
                 }
-
             }
-
         });
+        mController = new StandardVideoController(activity);
+        addControlComponent();
+    }
 
-//        //增加title
-//        videoPlayer.getTitleTextView().setVisibility(View.GONE);
-//
-//        //设置返回键
-//        videoPlayer.getBackButton().setVisibility(View.GONE);
-//
-//        //设置全屏按键功能
-//        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                resolveFullBtn(videoPlayer);
-//            }
-//        });
+    private void addControlComponent() {
+        CompleteView completeView = new CompleteView(activity);
+        ErrorView errorView = new ErrorView(activity);
+        mTitleView = new TitleView(activity);
+        mController.addControlComponent(completeView, errorView, mTitleView);
+        mController.addControlComponent(new VodControlView(activity));
+        mController.addControlComponent(new GestureView(activity));
     }
 
     /**
-     * 全屏幕按键处理
+     * 开始播放
+     *
+     * @param position 列表位置
      */
-    private void resolveFullBtn(final StandardGSYVideoPlayer standardGSYVideoPlayer) {
-        standardGSYVideoPlayer.startWindowFullscreen(activity, true, true);
+    public void startPlay(int position, boolean isRelease) {
+        if (mVideoView.isTinyScreen()) {
+            mVideoView.stopTinyScreen();
+        }
+        if (mCurPos != -1 && isRelease) {
+            releaseVideoView();
+        }
+        final VirtualLayoutManager layoutManager = (VirtualLayoutManager) mRecyclerView.getLayoutManager();
+        if (layoutManager == null) {
+            return;
+        }
+        final View itemView = layoutManager.findViewByPosition(position);
+        if (itemView == null || itemView.getTag() == null) {
+            return;
+        }
+
+        BaseViewHolder holder= (BaseViewHolder) itemView.getTag();
+
+//        VideoBean videoBean = mVideos.get(position);
+        VideoBean videoBean = mVideos.get(holder.relativePosition);
+
+        mVideoView.setUrl(videoBean.getVideoUrl());
+        mTitleView.setTitle(videoBean.getTitle());
+
+        //注意：要先设置控制才能去设置控制器的状态。
+        mVideoView.setVideoController(mController);
+        mController.setPlayState(mVideoView.getCurrentPlayState());
+
+
+        FrameLayout mPlayerContainer = holder.getView(R.id.player_container);
+        TextView mSummary =holder.getView(R.id.tv_summary);
+        PrepareView mPrepareView =  holder.getView(R.id.prepare_view);
+
+        //把列表中预置的PrepareView添加到控制器中，注意isPrivate此处只能为true。
+        mController.addControlComponent(mPrepareView, true);//holder.mPrepareView
+        removeViewFormParent(mVideoView);
+        mPlayerContainer.addView(mVideoView, 0);
+        //holder.mPlayerContainer.addView(mVideoView, 0);
+        mVideoView.start();
+        mCurPos = position;
     }
 
+    private void releaseVideoView() {
+        mVideoView.release();
+        if (mVideoView.isFullScreen()) {
+            mVideoView.stopFullScreen();
+        }
+        if (activity.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        mCurPos = -1;
+    }
 
     public BaseDelegateAdapter initList5(List<VideoListEntity.DataBean.ContentBean> contentList, int showNum) {
 
@@ -849,13 +743,11 @@ public class NewsVideoListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //GSYVideoManager.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        GSYVideoManager.onResume();
 
         //https://stackoverflow.com/questions/22552958/handling-back-press-when-using-fragments-in-android
         getView().setFocusableInTouchMode(true);
@@ -882,21 +774,13 @@ public class NewsVideoListFragment extends Fragment {
 
 
     public void onBackPressed() {
-        if (smallVideoHelper != null && smallVideoHelper.backFromFull()) {
-            return;
-        }
-        if (GSYVideoManager.backFromWindowFull(getActivity())) {
-            return;
-        }
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (smallVideoHelper != null) {
-            smallVideoHelper.releaseVideoPlayer();
-        }
-        GSYVideoManager.releaseAllVideos();
+
     }
 
 

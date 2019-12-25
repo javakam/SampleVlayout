@@ -14,7 +14,7 @@
         android:layout_marginTop="15dp"
         android:background="#aef"
         android:gravity="center"
-        android:text="自定义ExoPlayer详情播放页"
+        android:text="详情播放页"
         android:textStyle="bold" />
 
     <TextView
@@ -24,17 +24,7 @@
         android:layout_marginTop="15dp"
         android:background="#aef"
         android:gravity="center"
-        android:text="ExoPlayer RecyclerView列表 无缝播放"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tv_detail_exo_list2"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="15dp"
-        android:background="#aef"
-        android:gravity="center"
-        android:text="详细设置"
+        android:text="RecyclerView列表 无缝播放"
         android:textStyle="bold" />
 
     <TextView

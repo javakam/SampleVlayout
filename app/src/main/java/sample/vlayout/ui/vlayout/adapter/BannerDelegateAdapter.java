@@ -30,7 +30,7 @@ import sample.vlayout.utils.image.ImageLoader;
  * @author Changbao
  * @date 2019/12/24  15:35
  */
-public class BannerDelegateAdapter extends BaseDelegateAdapter {
+public class BannerDelegateAdapter extends BaseDelegateAdapter{
 
     private List<VideoListEntity.DataBean.ContentBean> content;
     private int prePosition = -1;

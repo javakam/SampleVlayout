@@ -2,25 +2,23 @@ package sample.vlayout.ui.vlayout.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.vlayout.LayoutHelper;
-import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper;
-
-import org.jetbrains.annotations.NotNull;
+import com.dueeeke.videocontroller.component.PrepareView;
 
 import sample.vlayout.R;
-import sample.vlayout.ui.vlayout.CoverImageLayout;
 import sample.vlayout.ui.vlayout.DataType;
 import sample.vlayout.ui.vlayout.entity.VideoListEntity;
-import sample.vlayout.utils.image.ImageLoader;
 
 /**
  * Title: ImageBigDelegateAdapter
@@ -36,15 +34,13 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
     public static final String VIDEO_LIST_TAG = "VIDEO_LIST_TAG";
 
     private VideoListEntity.DataBean bean;
-    private GSYVideoHelper smallVideoHelper;
 
     public ImageBigDelegateAdapter(Context context, LayoutHelper layoutHelper, int layoutId, int count, int viewTypeItem) {
         super(context, layoutHelper, layoutId, count, viewTypeItem);
     }
 
-    public void setData(VideoListEntity.DataBean bean, GSYVideoHelper smallVideoHelper) {
+    public void setData(VideoListEntity.DataBean bean) {
         this.bean = bean;
-        this.smallVideoHelper = smallVideoHelper;
     }
 
     @Override
@@ -52,25 +48,6 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
         super.onViewRecycled(holder);
         Toast.makeText(mContext, "ImageBigDelegateAdapter 被回收 ", Toast.LENGTH_SHORT).show();
         //recyclerView.getRecycledViewPool().getRecycledViewCount(ViewType.TYPE_BANNER)
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(@NotNull BaseViewHolder holder) {
-        // smallVideoHelper.releaseVideoPlayer();
-        super.onViewDetachedFromWindow(holder);
-    }
-
-    @Override
-    public void onViewAttachedToWindow(@NotNull BaseViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-//        if (smallVideoHelper.isSmall()) {
-//            smallVideoHelper.smallVideoToNormal();
-//        }
     }
 
     @Override
@@ -92,6 +69,12 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
                 中的 onBindViewHolderWithOffset() 方法代替传统的 onBindViewHolder() 方法，其中的 position 参数也是相对位置,offsetTotal 为绝对位置。
                  */
 
+        //保存位置
+        holder.relativePosition = position;
+        holder.absolutePosition = offsetTotal;
+        holder.itemView.setTag(holder);
+        //holder.position = offsetTotal;
+
         String summary, cover, videoUrl = "";
         int dataType;
         if (bean.getDataType() == DataType.DEFAULT) {
@@ -107,101 +90,42 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
         }
 
         //动态添加播放器
-        final CoverImageLayout coverImageLayout = holder.getView(R.id.coverImageLayout);
-        coverImageLayout.setOnClickListener(null);
+//        final CoverImageLayout coverImageLayout = holder.getView(R.id.coverImageLayout);
+//        coverImageLayout.setOnClickListener(null);
         final int finalDataType = dataType;
         final int finalPosition = offsetTotal;
+        Log.w("123", "DataType.VIDEO " + position + "  " + dataType + " " + videoUrl + "  offsetTotal : " + offsetTotal);
 
-        //DKPlayer
-        //保存位置
-        //holder.itemView.setTag(finalPosition);
 
         switch (finalDataType) {
             case DataType.VIDEO:
-                Log.w("123", "DataType.VIDEO " + position + "  " + dataType + " " + videoUrl + "  offsetTotal : " + offsetTotal);
 
-                coverImageLayout.setCoverImg(R.drawable.selector_cover_video);
-                //Log.w("123", "video  videoUrl " + videoUrl);
-
+//                coverImageLayout.setCoverImg(R.drawable.selector_cover_video);
                 if (TextUtils.isEmpty(videoUrl)) {
                     break;
                 }
                 final String finalVideoUrl = videoUrl;
-
-
-                //DKPlayer
-//                        PrepareView mPrepareView = holder.getView(R.id.prepare_view);
-//                        coverImageLayout.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                if (finalDataType == DataType.VIDEO) {
-//                                    //startPlay(finalPosition, true);
-//
-//                                    if (mVideoView.isTinyScreen()) {
-//                                        mVideoView.stopTinyScreen();
-//                                    }
-//                                    if (mCurPos != -1) {
-//                                        releaseVideoView();
-//                                    }
-//                                    mVideoView.setUrl(finalVideoUrl);
-//                                    mTitleView.setTitle(summary);
-//
-//                                    //注意：要先设置控制才能去设置控制器的状态。
-//                                    mVideoView.setVideoController(mController);
-//                                    mController.setPlayState(mVideoView.getCurrentPlayState());
-//
-//                                    //把列表中预置的PrepareView添加到控制器中，注意isPrivate此处只能为true。
-//                                    mController.addControlComponent(mPrepareView, true);
-//                                    removeViewFormParent(mVideoView);
-//
-//                                    coverImageLayout.removeAllViews();
-//                                    coverImageLayout.addView(mVideoView, 0);
-//                                    mVideoView.start();
-//                                    mCurPos = finalPosition;
-//
-//                                }
-//                            }
-//                        });
-
-                //GSYPlayer
-                smallVideoHelper.addVideoPlayer(finalPosition, coverImageLayout.getBackImg(), VIDEO_LIST_TAG, coverImageLayout, coverImageLayout.getCoverImg());
-
-                //smallVideoHelper.setPlayPositionAndTag(finalPosition, VIDEO_LIST_TAG);
-
-                coverImageLayout.setOnClickListener(new View.OnClickListener() {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(mContext, "coverImageLayout: " + finalDataType + " finalPosition: " + finalPosition, Toast.LENGTH_SHORT).show();
-
-                        //使用此方法添加数据，使用notifyDataSetChanged会导致正在播放的视频中断
-                        //notifyItemRangeChanged(size, videos.size());
-
-                        //listVideoUtil.setLoop(true);
-                        //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
-
-                        // final String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-                        smallVideoHelper.getGsyVideoOptionBuilder()
-                                .setVideoTitle("title " + finalPosition)
-                                .setUrl(finalVideoUrl);
-                        smallVideoHelper.startPlay();
-
-                        //必须在startPlay之后设置才能生效
-                        //listVideoUtil.getGsyVideoPlayer().getTitleTextView().setVisibility(View.VISIBLE);
+                        if (callBack != null) {
+                            callBack.call(position, finalPosition);
+                        }
                     }
                 });
 
                 break;
             case DataType.AUDIO:
-                coverImageLayout.setCoverImg(R.drawable.ic_cover_audio);
+//                coverImageLayout.setCoverImg(R.drawable.ic_cover_audio);
                 break;
             default:
                 Log.e("123", "hideCover finalPosition " + finalPosition + "  " + dataType);
-                coverImageLayout.hideCover();
+//                coverImageLayout.hideCover();
                 break;
         }
         if (finalDataType != DataType.VIDEO) {
             //加载预览图
-            ImageLoader.get().loadImage(coverImageLayout.getBackImg(), cover);
+            // ImageLoader.get().loadImage(coverImageLayout.getBackImg(), cover);
         }
 
 
@@ -212,20 +136,39 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, "摘要", Toast.LENGTH_SHORT).show();
-
             }
         });
 
-//                Objects.requireNonNull(holder.itemView).setOnClickListener(v -> {
-//                    //点击事件
-//                    Toast.makeText(activity, "initList4 finalPosition : " + finalPosition, Toast.LENGTH_SHORT).show();
-//                });
+//     Objects.requireNonNull(holder.itemView).setOnClickListener(v -> {
+//         //点击事件
+//         Toast.makeText(activity, "initList4 finalPosition : " + finalPosition, Toast.LENGTH_SHORT).show();
+//     });
 
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        super.onBindViewHolder(holder, position);
+//    public class MediaBaseViewHolder extends BaseViewHolder {
+//        public int position = -1;
+//        public FrameLayout mPlayerContainer;
+//        public TextView mSummary;
+//        public ImageView mThumb;
+//        public PrepareView mPrepareView;
+//
+//        public MediaBaseViewHolder(View view) {
+//            super(view);
+//            mPlayerContainer = itemView.findViewById(R.id.player_container);
+//            mSummary = itemView.findViewById(R.id.tv_summary);
+//            mPrepareView = itemView.findViewById(R.id.prepare_view);
+//            mThumb = mPrepareView.findViewById(R.id.thumb);
+//        }
+//    }
 
+    private CallBack callBack;
+
+    public void setCallBack(CallBack callBack) {
+        this.callBack = callBack;
+    }
+
+    public interface CallBack {
+        void call(int position, int finalPosition);
     }
 }

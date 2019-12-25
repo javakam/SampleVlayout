@@ -23,6 +23,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -47,6 +48,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     private final LinkedHashSet<Integer> itemChildLongClickViewIds;
     private BaseDelegateAdapter adapter;
+    public int relativePosition = -1;
+    public int absolutePosition = -1;
 
     /**
      * Package private field to retain the associated user object and detect a change
@@ -320,7 +323,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
     @SuppressWarnings("unchecked")
-    public BaseViewHolder addOnClickListener(@IdRes final int ...viewIds) {
+    public BaseViewHolder addOnClickListener(@IdRes final int... viewIds) {
         for (int viewId : viewIds) {
             childClickViewIds.add(viewId);
             final View view = getView(viewId);
@@ -353,7 +356,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param viewIds add the child views id   can support childview click
      * @return
      */
-    public BaseViewHolder setNestView(@IdRes int ... viewIds) {
+    public BaseViewHolder setNestView(@IdRes int... viewIds) {
         for (int viewId : viewIds) {
             nestViews.add(viewId);
         }
@@ -372,7 +375,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
     @SuppressWarnings("unchecked")
-    public BaseViewHolder addOnLongClickListener(@IdRes final int ... viewIds) {
+    public BaseViewHolder addOnLongClickListener(@IdRes final int... viewIds) {
         for (int viewId : viewIds) {
             itemChildLongClickViewIds.add(viewId);
             final View view = getView(viewId);
@@ -480,14 +483,15 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         }
         return this;
     }
+
     /**
      * Set the enabled state of this view.
      *
-     * @param viewId  The view id.
+     * @param viewId The view id.
      * @param enable The checked status;
      * @return The BaseViewHolder for chaining.
      */
-    public BaseViewHolder setEnabled(@IdRes int viewId,boolean enable) {
+    public BaseViewHolder setEnabled(@IdRes int viewId, boolean enable) {
         View view = getView(viewId);
         view.setEnabled(enable);
         return this;
