@@ -1,20 +1,15 @@
 package sample.vlayout.ui.vlayout.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.alibaba.android.vlayout.LayoutHelper;
-import com.dueeeke.videocontroller.component.PrepareView;
 
 import sample.vlayout.R;
 import sample.vlayout.ui.vlayout.DataType;
@@ -109,7 +104,7 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
                     @Override
                     public void onClick(View v) {
                         if (callBack != null) {
-                            callBack.call(position, finalPosition);
+                            callBack.call(holder,bean,position, finalPosition);
                         }
                     }
                 });
@@ -169,6 +164,6 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
     }
 
     public interface CallBack {
-        void call(int position, int finalPosition);
+        void call(BaseViewHolder holder, VideoListEntity.DataBean bean, int position, int finalPosition);
     }
 }
