@@ -1,4 +1,4 @@
-package sample.vlayout;
+package sample.vlayout.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import sample.vlayout.R;
 import sample.vlayout.ui.vlayout.FragmentContainerActivity;
 import sample.vlayout.ui.vlayout.NewsMediaListFragment;
 
