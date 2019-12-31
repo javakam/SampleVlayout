@@ -24,7 +24,7 @@ public class GsonUtils {
     private static final Gson sGson = createGson();
 
     private static Gson createGson() {
-        return new GsonBuilder().serializeNulls().create();
+        return new GsonBuilder().serializeNulls().setLenient().create();
     }
 
     /**

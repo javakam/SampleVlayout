@@ -24,6 +24,7 @@ import com.dueeeke.videoplayer.player.VideoView;
 import sample.vlayout.R;
 import sample.vlayout.bean.VideoBean;
 import sample.vlayout.ui.vlayout.adapter.BaseViewHolder;
+import sample.vlayout.ui.vlayout.entity.VideoListEntity;
 
 /**
  * Title: ListPlayHelper
@@ -42,7 +43,7 @@ public class ListPlayHelper {
     private VideoView mVideoView;
     private StandardVideoController mController;
 
-    private VideoBean mVideoBean;
+//    private VideoBean mVideoBean;
 
     private VirtualLayoutManager layoutManager;
     private int mCurPos = -1;
@@ -105,8 +106,8 @@ public class ListPlayHelper {
         }
     }
 
-    public void startPlay(int position,BaseViewHolder holder, VideoBean videoBean, boolean isRelease) {
-        this.mVideoBean = videoBean;
+    public void startPlay(BaseViewHolder holder, VideoBean videoBean, boolean isRelease) {
+//        this.mVideoBean = videoBean;
 
         if (mVideoView.isTinyScreen()) {
             mVideoView.stopTinyScreen();
@@ -134,7 +135,7 @@ public class ListPlayHelper {
         mPlayerContainer.addView(mVideoView, 0);
         //holder.mPlayerContainer.addView(mVideoView, 0);
         mVideoView.start();
-        mCurPos = position;
+        mCurPos = holder.absolutePosition;
     }
 
 //    /**

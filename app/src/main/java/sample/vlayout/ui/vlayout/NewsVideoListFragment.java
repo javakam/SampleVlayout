@@ -78,7 +78,7 @@ public class NewsVideoListFragment extends Fragment {
         this.activity = (Activity) context;
 
         mAdapters = new LinkedList<>();
-        String data = AssetsUtils.getJson(activity, "temp.json");// temp.json    videolist.json
+        String data = AssetsUtils.getJson(activity, "videolist.json");// temp.json    videolist.json
         mData = GsonUtils.fromJson(data, VideoListEntity.class).getData();
 
     }
@@ -174,7 +174,7 @@ public class NewsVideoListFragment extends Fragment {
                 if (position == playHelper.getCurrentPosition()) {
                     //playHelper.startPlay(position, false);
                     //mVideoBean = mVideos.get(holder.relativePosition);
-                    playHelper.startPlay(position, holder, mVideoBean, false);
+                    playHelper.startPlay(holder, mVideoBean, false);
                 }
             }
 
@@ -435,7 +435,7 @@ public class NewsVideoListFragment extends Fragment {
 
         adapter.setCallBack(new ImageBigDelegateAdapter.CallBack() {
             @Override
-            public void call(BaseViewHolder holder, VideoListEntity.DataBean bean, int position, int finalPosition) {
+            public void call(BaseViewHolder holder, VideoListEntity.DataBean bean, int position) {
                 if (bean.getDataType() == DataType.VIDEO) {
                     if (bean.getContent() != null) {
                         Toast.makeText(activity, "视频数 : " + bean.getContent().size(), Toast.LENGTH_SHORT).show();
@@ -448,7 +448,7 @@ public class NewsVideoListFragment extends Fragment {
                         mVideoBean = videoBean;
                     }
                 }
-                playHelper.startPlay(finalPosition, holder, mVideoBean, true);
+                playHelper.startPlay(holder, mVideoBean, true);
             }
         });
 

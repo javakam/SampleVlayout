@@ -77,7 +77,13 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
             cover = bean.getCover();
             dataType = bean.getDataType();
         } else {
+            if (bean.getContent() == null) {
+                return;
+            }
             final VideoListEntity.DataBean.ContentBean contentBean = bean.getContent().get(position);
+            if (contentBean == null) {
+                return;
+            }
             summary = contentBean.getSummary();
             cover = contentBean.getCover();
             dataType = contentBean.getDataType();
@@ -104,7 +110,7 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
                     @Override
                     public void onClick(View v) {
                         if (callBack != null) {
-                            callBack.call(holder,bean,position, finalPosition);
+                            callBack.call(holder, bean, position);
                         }
                     }
                 });
@@ -164,6 +170,6 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
     }
 
     public interface CallBack {
-        void call(BaseViewHolder holder, VideoListEntity.DataBean bean, int position, int finalPosition);
+        void call(BaseViewHolder holder, VideoListEntity.DataBean bean, int position);
     }
 }
