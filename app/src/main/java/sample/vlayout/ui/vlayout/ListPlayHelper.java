@@ -50,13 +50,13 @@ public class ListPlayHelper {
      * 当前播放的位置
      */
     private int mCurPos = -1;
+
     /**
      * 上次播放的位置，用于页面切回来之后恢复播放
      */
 //    protected int mLastPos = -1;
 //    private BaseViewHolder mLastHolder;
 //    private VideoBean mLastVideoBean;
-
     public int getCurrentPosition() {
         return mCurPos;
     }
@@ -110,7 +110,9 @@ public class ListPlayHelper {
 
     public void detachFromWindow(int position) {
         if (position == getCurrentPosition() && !mVideoView.isFullScreen()) {
-            mVideoView.startTinyScreen();
+            if (mVideoView.isPlaying()) {
+                mVideoView.startTinyScreen();
+            }
             mVideoView.setVideoController(null);
             mController.setPlayState(VideoView.STATE_IDLE);
         }

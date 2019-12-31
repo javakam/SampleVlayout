@@ -180,7 +180,9 @@ public class NewsVideoListFragment extends Fragment {
                 if (position == playHelper.getCurrentPosition()) {
                     //playHelper.startPlay(position, false);
                     //mVideoBean = mVideos.get(holder.relativePosition);
-                    playHelper.startPlay(holder, mVideoBean, false);
+                    if (playHelper.getVideoView().isPlaying()) {
+                        playHelper.startPlay(holder, mVideoBean, false);
+                    }
                 }
             }
 
@@ -672,7 +674,7 @@ public class NewsVideoListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        playHelper.resume();
+        //playHelper.resume();
 
     /*    if (mSkipToDetail) {
             //还原播放器
