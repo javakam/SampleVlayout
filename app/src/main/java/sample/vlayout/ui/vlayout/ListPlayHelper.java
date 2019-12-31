@@ -8,8 +8,6 @@ import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.extend.LayoutManagerCanScrollListener;
 import com.alibaba.android.vlayout.extend.PerformanceMonitor;
@@ -48,7 +46,6 @@ public class ListPlayHelper {
 
     private VideoBean mVideoBean;
 
-    private RecyclerView.LayoutManager layoutManager;
     /**
      * 当前播放的位置
      */
@@ -64,9 +61,8 @@ public class ListPlayHelper {
         return mCurPos;
     }
 
-    public ListPlayHelper(Activity activity, RecyclerView.LayoutManager layoutManager) {
+    public ListPlayHelper(Activity activity) {
         this.activity = activity;
-        this.layoutManager = layoutManager;
         initListVideoPlayer();
     }
 

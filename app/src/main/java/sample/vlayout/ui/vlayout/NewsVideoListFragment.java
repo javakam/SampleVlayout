@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.KeyEvent;
@@ -18,8 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -117,7 +114,7 @@ public class NewsVideoListFragment extends Fragment {
         final DelegateAdapter delegateAdapter = initRecyclerView();
         initAdapters(delegateAdapter);
 
-        playHelper = new ListPlayHelper(activity, mRecyclerView.getLayoutManager());
+        playHelper = new ListPlayHelper(activity);
 
         return view;
     }
@@ -470,7 +467,7 @@ public class NewsVideoListFragment extends Fragment {
                 mSkipToDetail = true;
                 if (bean.getDataType() == DataType.VIDEO) {
                     if (bean.getContent() != null) {
-                        Toast.makeText(activity, "视频数 : " + bean.getContent().size(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(activity, "视频数 : " + bean.getContent().size(), Toast.LENGTH_SHORT).show();
                         VideoListEntity.DataBean.ContentBean c = bean.getContent().get(0);
                         VideoBean videoBean = new VideoBean();
                         videoBean.setTitle(c.getTitle());
@@ -488,31 +485,46 @@ public class NewsVideoListFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), NewsVideoDetailActivity.class);
                 Bundle bundle = new Bundle();
 
-                if (holder.absolutePosition == playHelper.getCurrentPosition()) {
-                    //需要无缝播放
-                    bundle.putBoolean(IntentKeys.SEAMLESS_PLAY, true);
-                    bundle.putString(IntentKeys.TITLE, mVideoBean.getTitle());
-                } else {
-                    //无需无缝播放，把相应数据传到详情页
-                    playHelper.getVideoView().release();
-                    //需要把控制器还原
-                    playHelper.getController().setPlayState(VideoView.STATE_IDLE);
-                    bundle.putBoolean(IntentKeys.SEAMLESS_PLAY, false);
-                    bundle.putString(IntentKeys.URL, mVideoBean.getVideoUrl());
-                    bundle.putString(IntentKeys.TITLE, mVideoBean.getTitle());
-                    playHelper.setPosition(holder.absolutePosition);
-                }
-                intent.putExtras(bundle);
+                //无需无缝播放，把相应数据传到详情页
+                playHelper.getVideoView().pause();
+                //需要把控制器还原
+                playHelper.getController().setPlayState(VideoView.STATE_IDLE);
+                //bundle.putBoolean(IntentKeys.SEAMLESS_PLAY, false);
+//                intent.putExtra(IntentKeys.VIDEO_BEAN,bean);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    View sharedView = holder.getView(R.id.player_container);
-                    //使用共享元素动画
-                    ActivityOptionsCompat options = ActivityOptionsCompat
-                            .makeSceneTransitionAnimation(activity, sharedView, "player_container");
-                    ActivityCompat.startActivity(activity, intent, options.toBundle());
-                } else {
-                    startActivity(intent);
-                }
+                bundle.putBoolean(IntentKeys.IS_LIVE, false);//录播
+                bundle.putString(IntentKeys.URL, mVideoBean.getVideoUrl());
+                bundle.putString(IntentKeys.TITLE, mVideoBean.getTitle());
+                bundle.putString(IntentKeys.COVER, mVideoBean.getThumb());
+                playHelper.setPosition(holder.absolutePosition);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+//                if (holder.absolutePosition == playHelper.getCurrentPosition()) {
+//                    //需要无缝播放
+//                    bundle.putBoolean(IntentKeys.SEAMLESS_PLAY, true);
+//                    bundle.putString(IntentKeys.TITLE, mVideoBean.getTitle());
+//                } else {
+//                    //无需无缝播放，把相应数据传到详情页
+//                    playHelper.getVideoView().release();
+//                    //需要把控制器还原
+//                    playHelper.getController().setPlayState(VideoView.STATE_IDLE);
+//                    bundle.putBoolean(IntentKeys.SEAMLESS_PLAY, false);
+//                    bundle.putString(IntentKeys.URL, mVideoBean.getVideoUrl());
+//                    bundle.putString(IntentKeys.TITLE, mVideoBean.getTitle());
+//                    playHelper.setPosition(holder.absolutePosition);
+//                }
+//                intent.putExtras(bundle);
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    View sharedView = holder.getView(R.id.player_container);
+//                    //使用共享元素动画
+//                    ActivityOptionsCompat options = ActivityOptionsCompat
+//                            .makeSceneTransitionAnimation(activity, sharedView, "player_container");
+//                    ActivityCompat.startActivity(activity, intent, options.toBundle());
+//                } else {
+//                    startActivity(intent);
+//                }
             }
         });
 
@@ -651,9 +663,10 @@ public class NewsVideoListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (!mSkipToDetail) {
-            playHelper.pause();
-        }
+//        if (!mSkipToDetail) {
+//            playHelper.pause();
+//        }
+        playHelper.pause();
     }
 
     @Override
@@ -661,7 +674,7 @@ public class NewsVideoListFragment extends Fragment {
         super.onResume();
         playHelper.resume();
 
-        if (mSkipToDetail) {
+    /*    if (mSkipToDetail) {
             //还原播放器
 //            playHelper.playLastPosition();
 
@@ -676,7 +689,7 @@ public class NewsVideoListFragment extends Fragment {
             mSkipToDetail = false;
         } else {
             playHelper.resume();
-        }
+        }*/
     }
 
 
@@ -686,6 +699,5 @@ public class NewsVideoListFragment extends Fragment {
         playHelper.destroy();
 
     }
-
 
 }
