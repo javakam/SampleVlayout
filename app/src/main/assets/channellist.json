@@ -1,37 +1,98 @@
 {
   "data": [
     {
-      "id": "267",
-      "node_name": "财经频道",
+      "id": "100",
+      "title": "新闻",
       "fixed": true,
-      "parent_id": "1"
+      "jump": 0,
+      "pid": "1"
     },
     {
-      "id": "268",
-      "node_name": "基金频道",
+      "id": "101",
+      "title": "热点",
       "fixed": false,
-      "parent_id": "1"
+      "jump": 0,
+      "pid": "1"
     },
     {
-      "id": "531",
-      "node_name": "评论频道",
+      "id": "102",
+      "title": "直通车",
       "fixed": false,
-      "parent_id": "1"
+      "jump": 1,
+      "url": "http://www.baidu.com",
+      "pid": "1"
     },
     {
-      "id": "358",
-      "node_name": "新股提示",
-      "parent_id": "297"
+      "id": "103",
+      "title": "投服",
+      "jump": 0,
+      "pid": "297"
     },
     {
-      "id": "359",
-      "node_name": "基金发行上市扩募提示",
-      "parent_id": "297"
+      "id": "200",
+      "jump": 0,
+      "title": "价值",
+      "pid": "101"
     },
     {
-      "id": "360",
-      "node_name": "市场要闻点评",
-      "parent_id": "297"
+      "id": "201",
+      "title": "异动",
+      "jump": 0,
+      "pid": "101"
+    },
+    {
+      "id": "202",
+      "jump": 0,
+      "title": "榜单",
+      "pid": "101"
+    },
+    {
+      "id": "300",
+      "jump": 0,
+      "title": "专题(重大)",
+      "pid": "102"
+    },
+    {
+      "id": "301",
+      "jump": 0,
+      "title": "监管直通车",
+      "pid": "102"
+    },
+    {
+      "id": "302",
+      "jump": 0,
+      "title": "公司直通车",
+      "pid": "102"
+    },
+    {
+      "id": "303",
+      "jump": 0,
+      "title": "机构直通车",
+      "pid": "102"
+    },
+    {
+      "id": "304",
+      "jump": 0,
+      "title": "投资直通车",
+      "pid": "102"
+    },
+    {
+      "id": "400",
+      "jump": 0,
+      "title": "投资者教育",
+      "pid": "103"
+    },
+    {
+      "id": "401",
+      "jump": 0,
+      "title": "投保",
+      "pid": "103"
+    },
+    {
+      "id": "402",
+      "jump": 0,
+      "title": "维权",
+      "pid": "103"
     }
   ],
   "msg": "请求成功",

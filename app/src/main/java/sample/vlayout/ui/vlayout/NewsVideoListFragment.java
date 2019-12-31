@@ -131,7 +131,7 @@ public class NewsVideoListFragment extends Fragment {
     }
 
     public DelegateAdapter initRecyclerView() {
-        setMaxFlingVelocity(mRecyclerView, 6000);
+        setMaxFlingVelocity(mRecyclerView, 7000);
 
         //初始化
 //        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {

@@ -119,7 +119,7 @@ public class ListPlayHelper {
         mVideoView.setUrl(videoBean.getVideoUrl());
         mTitleView.setTitle(videoBean.getTitle());
 
-        //注意：要先设置控制才能去设置控制器的状态。
+        //注意：要先设置控制才能去设置控制器的状态
         mVideoView.setVideoController(mController);
         mController.setPlayState(mVideoView.getCurrentPlayState());
 
@@ -137,11 +137,11 @@ public class ListPlayHelper {
         mCurPos = position;
     }
 
-    /**
-     * 开始播放
-     *
-     * @param position 列表位置
-     */
+//    /**
+//     * 开始播放
+//     *
+//     * @param position 列表位置
+//     */
 //    public void startPlay(int position, boolean isRelease) {
 //        if (mVideoView.isTinyScreen()) {
 //            mVideoView.stopTinyScreen();

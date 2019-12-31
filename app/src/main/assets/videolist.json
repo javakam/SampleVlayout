@@ -23,6 +23,7 @@
         {
           "title": "雪花",
           "dataType": 6,
+          "channeltype": "news:46932",
           "url": "https://www.bilibili.com/video/av79331379?spm_id_from=333.851.b_7265706f7274466972737431.1",
           "cover": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505470629546&di=194a9a92bfcb7754c5e4d19ff1515355&imgtype=0&src=http%3A%2F%2Fpics.jiancai.com%2Fimgextra%2Fimg01%2F656928666%2Fi1%2FT2_IffXdxaXXXXXXXX_%2521%2521656928666.jpg",
           "coverBig": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505470629546&di=194a9a92bfcb7754c5e4d19ff1515355&imgtype=0&src=http%3A%2F%2Fpics.jiancai.com%2Fimgextra%2Fimg01%2F656928666%2Fi1%2FT2_IffXdxaXXXXXXXX_%2521%2521656928666.jpg"
@@ -79,6 +80,7 @@
           "commentNum": "1865",
           "praiseNum": "98",
           "shareNum": "786",
+          "channeltype": "news:46938",
           "authorId": "1212212",
           "authorName": "逗你玩",
           "url": "",
@@ -112,6 +114,7 @@
       "content": [
         {
           "title": "绿卡能成功登陆新三板",
+          "channeltype": "news:46937",
           "mediaId": "440a4e0dd61e443696bf1542020790fb",
           "mediaName": "",
           "summary": "文件可以从文件管理器中选择（多个文件可以选择），并拖入UltraEdit的窗口。如果鼠标按钮被释放超过UltraEdit中选择的文件将自动打开鼠标用UltraEdit编辑。",
@@ -386,6 +389,7 @@
       "praiseNum": "98",
       "shareNum": "786",
       "authorId": "1212212",
+      "channeltype": "news:46931",
       "authorName": "逗你玩",
       "cover": "http://vod.zqrb.cn/15093469c30b4c40a7d4d4b70ac91d39/snapshots/4d2c826f559d4ea082465019c7ab81a0-00005.jpg",
       "coverBig": "http://vod.zqrb.cn/15093469c30b4c40a7d4d4b70ac91d39/snapshots/4d2c826f559d4ea082465019c7ab81a0-00005.jpg"
