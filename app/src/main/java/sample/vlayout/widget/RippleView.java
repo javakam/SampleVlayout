@@ -156,7 +156,7 @@ public class RippleView extends FrameLayout {
                 durationEmpty = -1;
                 timerEmpty = 0;
                 // There is problem on Android M where canvas.restore() seems to be called automatically
-                // For now, don't call canvas.restore() manually on Android M (API 23)
+                // For now, don't onVideoClick canvas.restore() manually on Android M (API 23)
                 if (Build.VERSION.SDK_INT != 23) {
                     canvas.restore();
                 }

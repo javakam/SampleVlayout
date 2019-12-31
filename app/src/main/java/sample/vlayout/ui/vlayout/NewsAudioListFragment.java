@@ -182,7 +182,7 @@ public class NewsAudioListFragment extends Fragment {
             }
         }
 
-        playHelper = new ListPlayHelper(activity);
+        playHelper = new ListPlayHelper(activity,mRecyclerView.getLayoutManager());
 
         adapter = new MultiTypeAdapter();
 

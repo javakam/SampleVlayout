@@ -55,6 +55,7 @@ import sample.vlayout.R;
 public class CoverImageLayout extends FrameLayout {
 
     private AppCompatImageView backImg, coverImg;
+    private ViewGroup controlView;
     private boolean isCoverShow;//注:默认不显示 Cover图片
     private Drawable coverDrawable;
 
@@ -117,6 +118,12 @@ public class CoverImageLayout extends FrameLayout {
         }
     }
 
+    public void hideBackImg() {
+        if (backImg != null) {
+            backImg.setVisibility(GONE);
+        }
+    }
+
     public AppCompatImageView getBackImg() {
         return backImg;
     }
@@ -136,6 +143,14 @@ public class CoverImageLayout extends FrameLayout {
             showCover();
             this.coverImg.setImageResource(resId);
         }
+    }
+
+    public void setVideoControlView(ViewGroup controlView) {
+        this.controlView = controlView;
+        hideCover();
+        hideBackImg();
+        controlView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        addView(controlView);
     }
 
     private int dp2px(Context context, double dpValue) {

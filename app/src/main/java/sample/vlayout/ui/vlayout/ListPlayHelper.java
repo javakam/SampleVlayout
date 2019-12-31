@@ -8,6 +8,8 @@ import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.extend.LayoutManagerCanScrollListener;
 import com.alibaba.android.vlayout.extend.PerformanceMonitor;
@@ -20,11 +22,12 @@ import com.dueeeke.videocontroller.component.PrepareView;
 import com.dueeeke.videocontroller.component.TitleView;
 import com.dueeeke.videocontroller.component.VodControlView;
 import com.dueeeke.videoplayer.player.VideoView;
+import com.dueeeke.videoplayer.player.VideoViewManager;
 
 import sample.vlayout.R;
 import sample.vlayout.bean.VideoBean;
+import sample.vlayout.player.PlayerConstant;
 import sample.vlayout.ui.vlayout.adapter.BaseViewHolder;
-import sample.vlayout.ui.vlayout.entity.VideoListEntity;
 
 /**
  * Title: ListPlayHelper
@@ -43,32 +46,57 @@ public class ListPlayHelper {
     private VideoView mVideoView;
     private StandardVideoController mController;
 
-//    private VideoBean mVideoBean;
+    private VideoBean mVideoBean;
 
-    private VirtualLayoutManager layoutManager;
+    private RecyclerView.LayoutManager layoutManager;
+    /**
+     * 当前播放的位置
+     */
     private int mCurPos = -1;
+    /**
+     * 上次播放的位置，用于页面切回来之后恢复播放
+     */
+//    protected int mLastPos = -1;
+//    private BaseViewHolder mLastHolder;
+//    private VideoBean mLastVideoBean;
 
     public int getCurrentPosition() {
         return mCurPos;
     }
 
-    public ListPlayHelper(Activity activity) {
+    public ListPlayHelper(Activity activity, RecyclerView.LayoutManager layoutManager) {
         this.activity = activity;
+        this.layoutManager = layoutManager;
         initListVideoPlayer();
     }
 
     private void initListVideoPlayer() {
         mVideoView = new VideoView(activity);
+
+        VideoViewManager.instance().add(mVideoView, PlayerConstant.Tag.SEAMLESS);
+
         mVideoView.setOnStateChangeListener(new VideoView.SimpleOnStateChangeListener() {
             @Override
             public void onPlayStateChanged(int playState) {
                 if (playState == VideoView.STATE_PLAYBACK_COMPLETED) {
                     if (mVideoView.isTinyScreen()) {
                         mVideoView.stopTinyScreen();
-
                         releaseVideoView();
                     }
                 }
+
+                //监听VideoViewManager释放，重置状态
+//                if (playState == VideoView.STATE_IDLE) {
+//                    removeViewFormParent(mVideoView);
+//                    mLastPos = mCurPos;
+//
+//                    View itemView = layoutManager.findViewByPosition(mLastPos);
+//                    if (itemView != null && itemView.getTag() != null) {
+//                        mLastHolder = (BaseViewHolder) itemView.getTag();
+//                        mLastVideoBean = mVideoBean;
+//                    }
+//                    mCurPos = -1;
+//                }
             }
         });
         mController = new StandardVideoController(activity);
@@ -92,11 +120,10 @@ public class ListPlayHelper {
         }
     }
 
-
     /**
      * 将View从父控件中移除
      */
-    private void removeViewFormParent(View v) {
+    public static void removeViewFormParent(View v) {
         if (v == null) {
             return;
         }
@@ -106,8 +133,9 @@ public class ListPlayHelper {
         }
     }
 
+
     public void startPlay(BaseViewHolder holder, VideoBean videoBean, boolean isRelease) {
-//        this.mVideoBean = videoBean;
+        this.mVideoBean = videoBean;
 
         if (mVideoView.isTinyScreen()) {
             mVideoView.stopTinyScreen();
@@ -136,6 +164,10 @@ public class ListPlayHelper {
         //holder.mPlayerContainer.addView(mVideoView, 0);
         mVideoView.start();
         mCurPos = holder.absolutePosition;
+    }
+
+    public void setPosition(int absPosition) {
+        this.mCurPos = absPosition;
     }
 
 //    /**
@@ -186,6 +218,26 @@ public class ListPlayHelper {
 //        mCurPos = position;
 //    }
 
+    public VideoView getVideoView() {
+        return mVideoView;
+    }
+
+    public StandardVideoController getController() {
+        return mController;
+    }
+
+//    public void setLastParam(BaseViewHolder holder, VideoBean videoBean) {
+//        mLastHolder = holder;
+//        mLastVideoBean = videoBean;
+//    }
+//
+//    public void playLastPosition() {
+//        if (mLastHolder == null || mLastVideoBean == null) {
+//            return;
+//        }
+//        startPlay(mLastHolder, mLastVideoBean, true);
+//    }
+
     public void releaseVideoView() {
         mVideoView.release();
         if (mVideoView.isFullScreen()) {
@@ -200,8 +252,13 @@ public class ListPlayHelper {
     public void resume() {
         if (mVideoView != null) {
             mVideoView.resume();
-
         }
+
+//        if (mLastPos == -1) {
+//            return;
+//        }
+//        //恢复上次播放的位置
+//        startPlay(mLastHolder, mLastVideoBean, true);
     }
 
     public void pause() {

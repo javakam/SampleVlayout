@@ -4,16 +4,19 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.alibaba.android.vlayout.LayoutHelper;
+import com.dueeeke.videocontroller.component.PrepareView;
 
 import sample.vlayout.R;
 import sample.vlayout.ui.vlayout.DataType;
 import sample.vlayout.ui.vlayout.entity.VideoListEntity;
+import sample.vlayout.utils.image.ImageLoader;
 
 /**
  * Title: ImageBigDelegateAdapter
@@ -25,8 +28,6 @@ import sample.vlayout.ui.vlayout.entity.VideoListEntity;
  * @date 2019/12/24  16:29
  */
 public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
-
-    public static final String VIDEO_LIST_TAG = "VIDEO_LIST_TAG";
 
     private VideoListEntity.DataBean bean;
 
@@ -48,27 +49,26 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
     @Override
     protected void onBindViewHolderWithOffset(BaseViewHolder holder, final int position, int offsetTotal) {
         super.onBindViewHolderWithOffset(holder, position, offsetTotal);
-                /*
-                获取 DelegateAdapter 里数据的相对位置
+        /*
+        获取 DelegateAdapter 里数据的相对位置
 
-                在 DelegateAdapter 里有 findOffsetPosition(int absolutePosition) 方法，传入整个页面的绝对位置，获取相对位置。
-                   eg :  int offsetPosition = delegateAdapter.findOffsetPosition(1);
+        在 DelegateAdapter 里有 findOffsetPosition(int absolutePosition) 方法，传入整个页面的绝对位置，获取相对位置。
+           eg :  int offsetPosition = delegateAdapter.findOffsetPosition(1);
 
-                或者用
-                  public static abstract class Adapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
-                      public abstract LayoutHelper onCreateLayoutHelper();
+        或者用
+          public static abstract class Adapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+              public abstract LayoutHelper onCreateLayoutHelper();
 
-                      protected void onBindViewHolderWithOffset(VH holder, int position, int offsetTotal) {
-                      }
-                  }
-                中的 onBindViewHolderWithOffset() 方法代替传统的 onBindViewHolder() 方法，其中的 position 参数也是相对位置,offsetTotal 为绝对位置。
-                 */
+              protected void onBindViewHolderWithOffset(VH holder, int position, int offsetTotal) {
+              }
+          }
+        中的 onBindViewHolderWithOffset() 方法代替传统的 onBindViewHolder() 方法，其中的 position 参数也是相对位置,offsetTotal 为绝对位置。
+         */
 
         //保存位置
         holder.relativePosition = position;
         holder.absolutePosition = offsetTotal;
         holder.itemView.setTag(holder);
-        //holder.position = offsetTotal;
 
         String summary, cover, videoUrl = "";
         int dataType;
@@ -97,6 +97,8 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
         final int finalPosition = offsetTotal;
         Log.w("123", "DataType.VIDEO " + position + "  " + dataType + " " + videoUrl + "  offsetTotal : " + offsetTotal);
 
+        //控制视图
+        PrepareView prepareView = holder.getView(R.id.prepare_view);
 
         switch (finalDataType) {
             case DataType.VIDEO:
@@ -110,24 +112,24 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
                     @Override
                     public void onClick(View v) {
                         if (callBack != null) {
-                            callBack.call(holder, bean, position);
+                            callBack.onVideoClick(holder, bean);
                         }
                     }
                 });
 
                 break;
             case DataType.AUDIO:
-//                coverImageLayout.setCoverImg(R.drawable.ic_cover_audio);
+                // coverImageLayout.setCoverImg(R.drawable.ic_cover_audio);
                 break;
             default:
                 Log.e("123", "hideCover finalPosition " + finalPosition + "  " + dataType);
 //                coverImageLayout.hideCover();
+                prepareView.findViewById(R.id.start_play).setVisibility(View.GONE);
                 break;
         }
-        if (finalDataType != DataType.VIDEO) {
-            //加载预览图
-            // ImageLoader.get().loadImage(coverImageLayout.getBackImg(), cover);
-        }
+        //加载预览图
+        ImageView backImg = prepareView.findViewById(R.id.thumb);
+        ImageLoader.get().loadImage(backImg, cover);
 
 
         TextView tvSummary = holder.getView(R.id.tv_summary);
@@ -137,6 +139,9 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, "摘要", Toast.LENGTH_SHORT).show();
+                if (callBack != null) {
+                    callBack.onDetailClick(holder, bean);
+                }
             }
         });
 
@@ -170,6 +175,8 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
     }
 
     public interface CallBack {
-        void call(BaseViewHolder holder, VideoListEntity.DataBean bean, int position);
+        void onVideoClick(BaseViewHolder holder, VideoListEntity.DataBean bean);
+        void onDetailClick(BaseViewHolder holder, VideoListEntity.DataBean bean);
     }
+
 }

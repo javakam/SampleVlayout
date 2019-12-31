@@ -3,7 +3,9 @@ package sample.vlayout.ui.vlayout;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.KeyEvent;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,6 +28,7 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
+import com.dueeeke.videoplayer.player.VideoView;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -42,6 +47,8 @@ import sample.vlayout.utils.AssetsUtils;
 import sample.vlayout.utils.GsonUtils;
 import sample.vlayout.utils.ScreenShotUtils;
 import sample.vlayout.utils.image.ImageLoader;
+
+import static sample.vlayout.player.PlayerConstant.IntentKeys;
 
 /**
  * Title: NewsVideoListFragment
@@ -100,16 +107,17 @@ public class NewsVideoListFragment extends Fragment {
                 }, 2000);
             }
         });
-        //优先初始化
-        playHelper = new ListPlayHelper(activity);
+
 
         mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setItemAnimator(null);
 //        mRecyclerView.setHasFixedSize(true);
 
-        final DelegateAdapter delegateAdapter = initRecyclerView();
 
+        final DelegateAdapter delegateAdapter = initRecyclerView();
         initAdapters(delegateAdapter);
+
+        playHelper = new ListPlayHelper(activity, mRecyclerView.getLayoutManager());
 
         return view;
     }
@@ -156,6 +164,7 @@ public class NewsVideoListFragment extends Fragment {
         pool.setMaxRecycledViews(8, 10);
         pool.setMaxRecycledViews(9, 10);
         pool.setMaxRecycledViews(10, 10);
+        pool.setMaxRecycledViews(11, 10);
 
         //创建VirtualLayoutManager对象
         VirtualLayoutManager layoutManager = new VirtualLayoutManager(activity);
@@ -408,6 +417,8 @@ public class NewsVideoListFragment extends Fragment {
         };
     }
 
+    private boolean mSkipToDetail;
+
     private ImageBigDelegateAdapter initList4(VideoListEntity.DataBean bean) {
 //        OnePlusNLayoutHelper onePlusNLayoutHelper = new OnePlusNLayoutHelper();
 //        //noinspection deprecation
@@ -432,10 +443,13 @@ public class NewsVideoListFragment extends Fragment {
         }
         final int finalDataType = bean.getDataType();
 
+        //提前添加到VideoViewManager，供详情使用
+        //VideoViewManager.instance().add(playHelper.getVideoView(), PlayerConstant.Tag.SEAMLESS);
 
         adapter.setCallBack(new ImageBigDelegateAdapter.CallBack() {
+
             @Override
-            public void call(BaseViewHolder holder, VideoListEntity.DataBean bean, int position) {
+            public void onVideoClick(BaseViewHolder holder, VideoListEntity.DataBean bean) {
                 if (bean.getDataType() == DataType.VIDEO) {
                     if (bean.getContent() != null) {
                         Toast.makeText(activity, "视频数 : " + bean.getContent().size(), Toast.LENGTH_SHORT).show();
@@ -449,6 +463,56 @@ public class NewsVideoListFragment extends Fragment {
                     }
                 }
                 playHelper.startPlay(holder, mVideoBean, true);
+            }
+
+            @Override
+            public void onDetailClick(BaseViewHolder holder, VideoListEntity.DataBean bean) {
+                mSkipToDetail = true;
+                if (bean.getDataType() == DataType.VIDEO) {
+                    if (bean.getContent() != null) {
+                        Toast.makeText(activity, "视频数 : " + bean.getContent().size(), Toast.LENGTH_SHORT).show();
+                        VideoListEntity.DataBean.ContentBean c = bean.getContent().get(0);
+                        VideoBean videoBean = new VideoBean();
+                        videoBean.setTitle(c.getTitle());
+                        videoBean.setThumb(c.getCover());
+                        videoBean.setAudioUrl(c.getAudio());
+                        videoBean.setVideoUrl(c.getVideo().getSD());
+                        mVideoBean = videoBean;
+                    }
+                }
+//                if (!playHelper.isPlaying()) {
+//                    playHelper.startPlay(holder, mVideoBean, true);
+//                }
+
+
+                Intent intent = new Intent(getActivity(), NewsVideoDetailActivity.class);
+                Bundle bundle = new Bundle();
+
+                if (holder.absolutePosition == playHelper.getCurrentPosition()) {
+                    //需要无缝播放
+                    bundle.putBoolean(IntentKeys.SEAMLESS_PLAY, true);
+                    bundle.putString(IntentKeys.TITLE, mVideoBean.getTitle());
+                } else {
+                    //无需无缝播放，把相应数据传到详情页
+                    playHelper.getVideoView().release();
+                    //需要把控制器还原
+                    playHelper.getController().setPlayState(VideoView.STATE_IDLE);
+                    bundle.putBoolean(IntentKeys.SEAMLESS_PLAY, false);
+                    bundle.putString(IntentKeys.URL, mVideoBean.getVideoUrl());
+                    bundle.putString(IntentKeys.TITLE, mVideoBean.getTitle());
+                    playHelper.setPosition(holder.absolutePosition);
+                }
+                intent.putExtras(bundle);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    View sharedView = holder.getView(R.id.player_container);
+                    //使用共享元素动画
+                    ActivityOptionsCompat options = ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(activity, sharedView, "player_container");
+                    ActivityCompat.startActivity(activity, intent, options.toBundle());
+                } else {
+                    startActivity(intent);
+                }
             }
         });
 
@@ -511,38 +575,6 @@ public class NewsVideoListFragment extends Fragment {
 
             }
         };
-
-//        LinearLayoutHelper linearLayoutHelper = new LinearLayoutHelper();
-//        linearLayoutHelper.setAspectRatio(4.0f);
-//        linearLayoutHelper.setDividerHeight(5);
-//        linearLayoutHelper.setMargin(0, 0, 0, 0);
-//        linearLayoutHelper.setPadding(0, 0, 0, 10);
-//        return new BaseDelegateAdapter(activity,
-//                linearLayoutHelper, R.layout.item_news_base_view, 10, Constant.viewType.typeFooter) {
-//            @Override
-//            public void onBindViewHolder(@NonNull BaseViewHolder holder,
-//                                         @SuppressLint("RecyclerView") final int position) {
-//                super.onBindViewHolder(holder, position);
-//                if (Constant.findBottomNews != null && Constant.findBottomNews.size() > 0) {
-//                    HomeBlogEntity model = Constant.findBottomNews.get(position);
-//                    holder.setText(R.id.tv_title, model.getTitle());
-//                    ImageView imageView = holder.getView(R.id.iv_logo);
-//                    ImageUtils.loadImgByPicasso(activity, model.getImageUrl()
-//                            , R.drawable.image_default, imageView);
-//                    holder.setText(R.id.tv_time, model.getTime());
-//                    Objects.requireNonNull(holder.getItemView()).setOnClickListener(v -> {
-//                        //点击事件
-//                        mView.setNewsList5Click(position,
-//                                Constant.findBottomNews.get(position).getVideoUrl());
-//                    });
-//                } else {
-//                    ImageView imageView = holder.getView(R.id.iv_logo);
-//                    holder.setText(R.id.tv_title, "新闻标题 ");
-//                    imageView.setImageResource(R.drawable.image_default);
-//                    holder.setText(R.id.tv_time, "新闻时间");
-//                }
-//            }
-//        };
     }
 
     /**
@@ -619,13 +651,32 @@ public class NewsVideoListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        playHelper.pause();
+        if (!mSkipToDetail) {
+            playHelper.pause();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         playHelper.resume();
+
+        if (mSkipToDetail) {
+            //还原播放器
+//            playHelper.playLastPosition();
+
+
+//            mController.addControlComponent(viewHolder.mPrepareView, true);
+//            mVideoView = VideoViewManager.instance().get(PlayerConstant.Tag.SEAMLESS);
+//            mController.setPlayState(mVideoView.getCurrentPlayState());
+//            mController.setPlayerState(mVideoView.getCurrentPlayerState());
+//            mVideoView.setVideoController(mController);
+//            Utils.removeViewFormParent(mVideoView);
+//            viewHolder.mPlayerContainer.addView(mVideoView, 0);
+            mSkipToDetail = false;
+        } else {
+            playHelper.resume();
+        }
     }
 
 

@@ -128,7 +128,7 @@ public class VideoItemViewBinder extends ItemViewBinder<VideoListEntity.DataBean
 //
 //        tvSummary.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v) {
+//            public void onVideoClick(View v) {
 //                Toast.makeText(holder.itemView.getContext(), "摘要", Toast.LENGTH_SHORT).show();
 //            }
 //        });
