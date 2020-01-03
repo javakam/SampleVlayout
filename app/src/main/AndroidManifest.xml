@@ -47,6 +47,10 @@
             android:name=".ui.vlayout.FragmentContainerActivity"
             android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.WebViewInnerVideoActivity"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
 
     </application>
 

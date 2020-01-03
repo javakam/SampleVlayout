@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import sample.vlayout.R;
 import sample.vlayout.ui.vlayout.DataType;
-import sample.vlayout.ui.vlayout.adapter.BaseViewHolder;
+import sample.vlayout.ui.vlayout.adapter.BaseVirtualViewHolder;
 import sample.vlayout.ui.vlayout.entity.VideoListEntity;
 
 /**
@@ -30,7 +30,7 @@ import sample.vlayout.ui.vlayout.entity.VideoListEntity;
  * @author Changbao
  * @date 2019/12/31  9:26
  */
-public class VideoItemViewBinder extends ItemViewBinder<VideoListEntity.DataBean, VideoItemViewBinder.ViewHolder> {
+public class VideoItemViewBinder extends ItemViewBinder<VideoListEntity.DataBean, VideoItemViewBinder.VirtualViewHolder> {
     private CallBack callBack;
 
     public void setCallBack(CallBack callBack) {
@@ -38,17 +38,17 @@ public class VideoItemViewBinder extends ItemViewBinder<VideoListEntity.DataBean
     }
 
     public interface CallBack {
-        void onClick(BaseViewHolder holder, VideoListEntity.DataBean bean);
+        void onClick(BaseVirtualViewHolder holder, VideoListEntity.DataBean bean);
     }
 
     @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(@NotNull LayoutInflater inflater, @NotNull ViewGroup viewGroup) {
-        return new ViewHolder(inflater.inflate(R.layout.item_video, viewGroup, false));
+    public VirtualViewHolder onCreateViewHolder(@NotNull LayoutInflater inflater, @NotNull ViewGroup viewGroup) {
+        return new VirtualViewHolder(inflater.inflate(R.layout.item_video, viewGroup, false));
     }
 
     @Override
-    public void onBindViewHolder(@NotNull ViewHolder holder, VideoListEntity.DataBean bean) {
+    public void onBindViewHolder(@NotNull VirtualViewHolder holder, VideoListEntity.DataBean bean) {
         //绑定位置信息
         final int ps = getPosition(holder);
         Log.w("123", "VideoItemViewBinder  ps  " + ps);
@@ -135,13 +135,13 @@ public class VideoItemViewBinder extends ItemViewBinder<VideoListEntity.DataBean
 
     }
 
-    public class ViewHolder extends BaseViewHolder {
+    public class VirtualViewHolder extends BaseVirtualViewHolder {
         FrameLayout mPlayerContainer;
         PrepareView mPrepareView;
         TextView mTitle;
         ImageView mThumb;
 
-        public ViewHolder(@NonNull View itemView) {
+        public VirtualViewHolder(@NonNull View itemView) {
             super(itemView);
             mPlayerContainer = itemView.findViewById(R.id.player_container);
             mPrepareView = itemView.findViewById(R.id.prepare_view);

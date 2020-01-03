@@ -36,7 +36,7 @@ import sample.vlayout.R;
 import sample.vlayout.bean.VideoBean;
 import sample.vlayout.ui.vlayout.adapter.BannerDelegateAdapter;
 import sample.vlayout.ui.vlayout.adapter.BaseDelegateAdapter;
-import sample.vlayout.ui.vlayout.adapter.BaseViewHolder;
+import sample.vlayout.ui.vlayout.adapter.BaseVirtualViewHolder;
 import sample.vlayout.ui.vlayout.adapter.ImageBigDelegateAdapter;
 import sample.vlayout.ui.vlayout.adapter.MultiItemsHorAdapter;
 import sample.vlayout.ui.vlayout.entity.VideoListEntity;
@@ -175,7 +175,7 @@ public class NewsVideoListFragment extends Fragment {
                 if (itemView.getTag() == null) {
                     return;
                 }
-                final BaseViewHolder holder = (BaseViewHolder) itemView.getTag();
+                final BaseVirtualViewHolder holder = (BaseVirtualViewHolder) itemView.getTag();
                 int position = holder.absolutePosition;
                 if (position == playHelper.getCurrentPosition()) {
                     //playHelper.startPlay(position, false);
@@ -191,7 +191,7 @@ public class NewsVideoListFragment extends Fragment {
                 if (itemView.getTag() == null) {
                     return;
                 }
-                final BaseViewHolder holder = (BaseViewHolder) itemView.getTag();
+                final BaseVirtualViewHolder holder = (BaseVirtualViewHolder) itemView.getTag();
                 int position = holder.absolutePosition;
                 playHelper.detachFromWindow(position);
             }
@@ -297,7 +297,7 @@ public class NewsVideoListFragment extends Fragment {
         return new BaseDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.vlayout_marqueue, 1, ViewType.TYPE_BANNER) {
 
             @Override
-            public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+            public void onBindViewHolder(@NonNull BaseVirtualViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
 
                 ImageView ivIcon = holder.getView(R.id.iv_vlayout_marqueue);
@@ -348,7 +348,7 @@ public class NewsVideoListFragment extends Fragment {
 //        StickyLayoutHelper stickyLayoutHelper = new StickyLayoutHelper();
         return new BaseDelegateAdapter(activity, new LinearLayoutHelper(), R.layout.vlayout_title, 1, ViewType.TYPE_TITLE) {
             @Override
-            public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+            public void onBindViewHolder(@NonNull BaseVirtualViewHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
                 holder.setText(R.id.tv_title, title);
                 TextView tvMore = holder.getView(R.id.tv_show_more);
@@ -377,7 +377,7 @@ public class NewsVideoListFragment extends Fragment {
 
         return new BaseDelegateAdapter(activity, linearLayoutHelper, R.layout.vlayout_title_summary, showNum, ViewType.TYPE_TITLE_SUMMARY) {
             @Override
-            public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+            public void onBindViewHolder(@NonNull BaseVirtualViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
                 holder.setText(R.id.tv_title, title);
                 holder.setText(R.id.tv_summary, summary);
@@ -399,7 +399,7 @@ public class NewsVideoListFragment extends Fragment {
 
         return new BaseDelegateAdapter(activity, linearLayoutHelper, R.layout.vlayout_title_summary_image_small, showNum, ViewType.TYPE_TITLE_IMAGE_SMALL) {
             @Override
-            public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+            public void onBindViewHolder(@NonNull BaseVirtualViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
                 holder.setText(R.id.tv_title, title);
                 holder.setText(R.id.tv_summary, summary);
@@ -448,7 +448,7 @@ public class NewsVideoListFragment extends Fragment {
         adapter.setCallBack(new ImageBigDelegateAdapter.CallBack() {
 
             @Override
-            public void onVideoClick(BaseViewHolder holder, VideoListEntity.DataBean bean) {
+            public void onVideoClick(BaseVirtualViewHolder holder, VideoListEntity.DataBean bean) {
                 if (bean.getDataType() == DataType.VIDEO) {
                     if (bean.getContent() != null) {
                         Toast.makeText(activity, "视频数 : " + bean.getContent().size(), Toast.LENGTH_SHORT).show();
@@ -465,7 +465,7 @@ public class NewsVideoListFragment extends Fragment {
             }
 
             @Override
-            public void onDetailClick(BaseViewHolder holder, VideoListEntity.DataBean bean) {
+            public void onDetailClick(BaseVirtualViewHolder holder, VideoListEntity.DataBean bean) {
                 mSkipToDetail = true;
                 if (bean.getDataType() == DataType.VIDEO) {
                     if (bean.getContent() != null) {
@@ -556,7 +556,7 @@ public class NewsVideoListFragment extends Fragment {
         //gridLayoutHelper.setSpanCount(6);
         return new BaseDelegateAdapter(activity, gridLayoutHelper, R.layout.vlayout_title_image_three, safeShowNum(contentList, showNum), ViewType.TYPE_TITLE_IMAGE_THREE) {
             @Override
-            public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+            public void onBindViewHolder(@NonNull BaseVirtualViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
 
                 // if (contentList != null && !contentList.isEmpty() && position < contentList.size()) {}
@@ -618,7 +618,7 @@ public class NewsVideoListFragment extends Fragment {
 
         return new BaseDelegateAdapter(activity, gridLayoutHelper, R.layout.vlayout_item_grid_title_image, num, ViewType.TYPE_NINE_GRID) {
             @Override
-            public void onBindViewHolder(@NonNull BaseViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+            public void onBindViewHolder(@NonNull BaseVirtualViewHolder holder, @SuppressLint("RecyclerView") final int position) {
                 super.onBindViewHolder(holder, position);
 
                 final VideoListEntity.DataBean.ContentBean bean = content.get(position);

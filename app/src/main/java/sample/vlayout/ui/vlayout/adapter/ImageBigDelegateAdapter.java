@@ -40,14 +40,14 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
     }
 
     @Override
-    public void onViewRecycled(@NonNull BaseViewHolder holder) {
+    public void onViewRecycled(@NonNull BaseVirtualViewHolder holder) {
         super.onViewRecycled(holder);
         Toast.makeText(mContext, "ImageBigDelegateAdapter 被回收 ", Toast.LENGTH_SHORT).show();
         //recyclerView.getRecycledViewPool().getRecycledViewCount(ViewType.TYPE_BANNER)
     }
 
     @Override
-    protected void onBindViewHolderWithOffset(BaseViewHolder holder, final int position, int offsetTotal) {
+    protected void onBindViewHolderWithOffset(BaseVirtualViewHolder holder, final int position, int offsetTotal) {
         super.onBindViewHolderWithOffset(holder, position, offsetTotal);
         /*
         获取 DelegateAdapter 里数据的相对位置
@@ -56,7 +56,7 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
            eg :  int offsetPosition = delegateAdapter.findOffsetPosition(1);
 
         或者用
-          public static abstract class Adapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+          public static abstract class Adapter<VH extends RecyclerView.VirtualViewHolder> extends RecyclerView.Adapter<VH> {
               public abstract LayoutHelper onCreateLayoutHelper();
 
               protected void onBindViewHolderWithOffset(VH holder, int position, int offsetTotal) {
@@ -152,7 +152,7 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
 
     }
 
-//    public class MediaBaseViewHolder extends BaseViewHolder {
+//    public class MediaBaseViewHolder extends BaseVirtualViewHolder {
 //        public int position = -1;
 //        public FrameLayout mPlayerContainer;
 //        public TextView mSummary;
@@ -175,8 +175,8 @@ public class ImageBigDelegateAdapter extends BaseDelegateAdapter {
     }
 
     public interface CallBack {
-        void onVideoClick(BaseViewHolder holder, VideoListEntity.DataBean bean);
-        void onDetailClick(BaseViewHolder holder, VideoListEntity.DataBean bean);
+        void onVideoClick(BaseVirtualViewHolder holder, VideoListEntity.DataBean bean);
+        void onDetailClick(BaseVirtualViewHolder holder, VideoListEntity.DataBean bean);
     }
 
 }

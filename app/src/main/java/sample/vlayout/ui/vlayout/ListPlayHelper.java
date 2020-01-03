@@ -25,7 +25,7 @@ import com.dueeeke.videoplayer.player.VideoViewManager;
 import sample.vlayout.R;
 import sample.vlayout.bean.VideoBean;
 import sample.vlayout.player.PlayerConstant;
-import sample.vlayout.ui.vlayout.adapter.BaseViewHolder;
+import sample.vlayout.ui.vlayout.adapter.BaseVirtualViewHolder;
 
 /**
  * Title: ListPlayHelper
@@ -55,7 +55,7 @@ public class ListPlayHelper {
      * 上次播放的位置，用于页面切回来之后恢复播放
      */
 //    protected int mLastPos = -1;
-//    private BaseViewHolder mLastHolder;
+//    private BaseVirtualViewHolder mLastHolder;
 //    private VideoBean mLastVideoBean;
     public int getCurrentPosition() {
         return mCurPos;
@@ -88,7 +88,7 @@ public class ListPlayHelper {
 //
 //                    View itemView = layoutManager.findViewByPosition(mLastPos);
 //                    if (itemView != null && itemView.getTag() != null) {
-//                        mLastHolder = (BaseViewHolder) itemView.getTag();
+//                        mLastHolder = (BaseVirtualViewHolder) itemView.getTag();
 //                        mLastVideoBean = mVideoBean;
 //                    }
 //                    mCurPos = -1;
@@ -132,7 +132,7 @@ public class ListPlayHelper {
     }
 
 
-    public void startPlay(BaseViewHolder holder, VideoBean videoBean, boolean isRelease) {
+    public void startPlay(BaseVirtualViewHolder holder, VideoBean videoBean, boolean isRelease) {
         this.mVideoBean = videoBean;
 
         if (mVideoView.isTinyScreen()) {
@@ -190,7 +190,7 @@ public class ListPlayHelper {
 ////            return;
 ////        }
 //
-//        BaseViewHolder holder = (BaseViewHolder) itemView.getTag();
+//        BaseVirtualViewHolder holder = (BaseVirtualViewHolder) itemView.getTag();
 //
 ////        VideoBean videoBean = mVideos.get(position);
 //        VideoBean videoBean = mVideos.get(holder.relativePosition);
@@ -224,7 +224,7 @@ public class ListPlayHelper {
         return mController;
     }
 
-//    public void setLastParam(BaseViewHolder holder, VideoBean videoBean) {
+//    public void setLastParam(BaseVirtualViewHolder holder, VideoBean videoBean) {
 //        mLastHolder = holder;
 //        mLastVideoBean = videoBean;
 //    }

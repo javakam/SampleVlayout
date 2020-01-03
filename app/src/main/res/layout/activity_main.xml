@@ -36,4 +36,14 @@
         android:gravity="center"
         android:text="证券日报视频"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_web_video"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="15dp"
+        android:background="#aef"
+        android:gravity="center"
+        android:text="WebView Html播放"
+        android:textStyle="bold" />
 </LinearLayout>

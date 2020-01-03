@@ -40,7 +40,7 @@ public class BannerDelegateAdapter extends BaseDelegateAdapter{
     }
 
     @Override
-    public void onViewRecycled(@NonNull BaseViewHolder holder) {
+    public void onViewRecycled(@NonNull BaseVirtualViewHolder holder) {
         super.onViewRecycled(holder);
         //     Toast.makeText(mContext, "Banner 被回收 ", Toast.LENGTH_SHORT).show();
         //recyclerView.getRecycledViewPool().getRecycledViewCount(ViewType.TYPE_BANNER)
@@ -51,7 +51,7 @@ public class BannerDelegateAdapter extends BaseDelegateAdapter{
     }
 
     @Override
-    public void onViewDetachedFromWindow(BaseViewHolder holder) {
+    public void onViewDetachedFromWindow(BaseVirtualViewHolder holder) {
 //        if (holder.itemView instanceof ViewPager) {
 //            RecyclerView recyclerView = ((RecyclerView) holder.itemView);
 //            int position = layoutManager.findFirstVisibleItemPosition();
@@ -67,7 +67,7 @@ public class BannerDelegateAdapter extends BaseDelegateAdapter{
     }
 
     @Override
-    public void onViewAttachedToWindow(BaseViewHolder holder) {
+    public void onViewAttachedToWindow(BaseVirtualViewHolder holder) {
         super.onViewAttachedToWindow(holder);
 //        if (holder.itemView instanceof ViewPager) {
 //            layoutManager.scrollToPositionWithOffset(position, xOffset);
@@ -77,7 +77,7 @@ public class BannerDelegateAdapter extends BaseDelegateAdapter{
     }
 
     @Override
-    protected void onBindViewHolderWithOffset(BaseViewHolder holder, int position, int offsetTotal) {
+    protected void onBindViewHolderWithOffset(BaseVirtualViewHolder holder, int position, int offsetTotal) {
         super.onBindViewHolderWithOffset(holder, position, offsetTotal);
 
         List<ImageView> viewList = new ArrayList<>();

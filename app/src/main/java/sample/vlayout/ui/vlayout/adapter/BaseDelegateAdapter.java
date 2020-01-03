@@ -11,7 +11,7 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 
-public class BaseDelegateAdapter extends DelegateAdapter.Adapter<BaseViewHolder> {
+public class BaseDelegateAdapter extends DelegateAdapter.Adapter<BaseVirtualViewHolder> {
 
     protected Context mContext;
     protected VirtualLayoutManager mLayoutManager;
@@ -43,15 +43,15 @@ public class BaseDelegateAdapter extends DelegateAdapter.Adapter<BaseViewHolder>
     @SuppressWarnings("unchecked")
     @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseVirtualViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == mViewTypeItem) {
-            return new BaseViewHolder(LayoutInflater.from(mContext).inflate(mLayoutId, parent, false));
+            return new BaseVirtualViewHolder(LayoutInflater.from(mContext).inflate(mLayoutId, parent, false));
         }
         return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseVirtualViewHolder holder, int position) {
     }
 
     /**
@@ -60,7 +60,7 @@ public class BaseDelegateAdapter extends DelegateAdapter.Adapter<BaseViewHolder>
      * @param offsetTotal 绝对位置
      */
     @Override
-    protected void onBindViewHolderWithOffset(BaseViewHolder holder, int position, int offsetTotal) {
+    protected void onBindViewHolderWithOffset(BaseVirtualViewHolder holder, int position, int offsetTotal) {
         super.onBindViewHolderWithOffset(holder, position, offsetTotal);
     }
 

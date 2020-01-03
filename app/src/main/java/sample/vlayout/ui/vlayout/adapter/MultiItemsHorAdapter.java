@@ -42,7 +42,7 @@ public class MultiItemsHorAdapter extends BaseDelegateAdapter {
     }
 
     @Override
-    public void onViewRecycled(@NonNull BaseViewHolder holder) {
+    public void onViewRecycled(@NonNull BaseVirtualViewHolder holder) {
         super.onViewRecycled(holder);
         // Toast.makeText(mContext, "MultiItemsHorAdapter 被回收 ", Toast.LENGTH_SHORT).show();
         //recyclerView.getRecycledViewPool().getRecycledViewCount(ViewType.TYPE_BANNER)
@@ -53,7 +53,7 @@ public class MultiItemsHorAdapter extends BaseDelegateAdapter {
     }
 
     @Override
-    public void onViewDetachedFromWindow(@NotNull BaseViewHolder holder) {
+    public void onViewDetachedFromWindow(@NotNull BaseVirtualViewHolder holder) {
         RecyclerView recyclerH = holder.getView(R.id.recyclerViewHor);
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerH.getLayoutManager();
         if (linearLayoutManager == null) {
@@ -70,7 +70,7 @@ public class MultiItemsHorAdapter extends BaseDelegateAdapter {
     }
 
     @Override
-    public void onViewAttachedToWindow(@NotNull BaseViewHolder holder) {
+    public void onViewAttachedToWindow(@NotNull BaseVirtualViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         RecyclerView recyclerH = holder.getView(R.id.recyclerViewHor);
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerH.getLayoutManager();
@@ -80,7 +80,7 @@ public class MultiItemsHorAdapter extends BaseDelegateAdapter {
     }
 
     @Override
-    protected void onBindViewHolderWithOffset(BaseViewHolder holder, int position, int offsetTotal) {
+    protected void onBindViewHolderWithOffset(BaseVirtualViewHolder holder, int position, int offsetTotal) {
         super.onBindViewHolderWithOffset(holder, position, offsetTotal);
 
 //      final int num = safeShowNum(content, showNum);

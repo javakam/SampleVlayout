@@ -23,7 +23,7 @@ import java.util.List;
 
 import sample.vlayout.R;
 import sample.vlayout.bean.VideoBean;
-import sample.vlayout.ui.vlayout.adapter.BaseViewHolder;
+import sample.vlayout.ui.vlayout.adapter.BaseVirtualViewHolder;
 import sample.vlayout.ui.vlayout.entity.VideoListEntity;
 import sample.vlayout.ui.vlayout.multitype.VideoItemViewBinder;
 import sample.vlayout.utils.AssetsUtils;
@@ -189,7 +189,7 @@ public class NewsAudioListFragment extends Fragment {
         VideoItemViewBinder videoItemViewBinder = new VideoItemViewBinder();
         videoItemViewBinder.setCallBack(new VideoItemViewBinder.CallBack() {
             @Override
-            public void onClick(BaseViewHolder holder, VideoListEntity.DataBean bean) {
+            public void onClick(BaseVirtualViewHolder holder, VideoListEntity.DataBean bean) {
 
                 if (bean.getDataType() == DataType.VIDEO) {
                     if (bean.getContent() != null) {
@@ -217,7 +217,7 @@ public class NewsAudioListFragment extends Fragment {
                 if (itemView.getTag() == null) {
                     return;
                 }
-                final BaseViewHolder holder = (BaseViewHolder) itemView.getTag();
+                final BaseVirtualViewHolder holder = (BaseVirtualViewHolder) itemView.getTag();
 
                 int position = holder.absolutePosition;
                 if (position == playHelper.getCurrentPosition()) {
@@ -232,7 +232,7 @@ public class NewsAudioListFragment extends Fragment {
                 if (itemView.getTag() == null) {
                     return;
                 }
-                final BaseViewHolder holder = (BaseViewHolder) itemView.getTag();
+                final BaseVirtualViewHolder holder = (BaseVirtualViewHolder) itemView.getTag();
                 int position = holder.absolutePosition;
                 playHelper.detachFromWindow(position);
             }

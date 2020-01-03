@@ -26,14 +26,14 @@ import java.util.HashSet;
 
 
 /**
- * Title:BaseViewHolder
+ * Title:BaseVirtualViewHolder
  * <p>
  * Description:  Joan Zapata  &  https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  * </p>
  * Author Changbao
  * Date 2018/10/25 9:39
  */
-public class BaseViewHolder extends RecyclerView.ViewHolder {
+public class BaseVirtualViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * Views indexed with their IDs
@@ -55,7 +55,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public int absolutePosition = -1;
 
 
-    public BaseViewHolder(View view) {
+    public BaseVirtualViewHolder(View view) {
         super(view);
         this.views = new SparseArray<View>();
         this.childClickViewIds = new HashSet<>();
@@ -82,15 +82,15 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId The view id.
      * @param value  The text to put in the text view.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setText(int viewId, CharSequence value) {
+    public BaseVirtualViewHolder setText(int viewId, CharSequence value) {
         TextView view = getView(viewId);
         view.setText(value);
         return this;
     }
 
-    public BaseViewHolder setText(int viewId, @StringRes int strId) {
+    public BaseVirtualViewHolder setText(int viewId, @StringRes int strId) {
         TextView view = getView(viewId);
         view.setText(strId);
         return this;
@@ -101,9 +101,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId     The view id.
      * @param imageResId The image resource id.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setImageResource(int viewId, @DrawableRes int imageResId) {
+    public BaseVirtualViewHolder setImageResource(int viewId, @DrawableRes int imageResId) {
         ImageView view = getView(viewId);
         view.setImageResource(imageResId);
         return this;
@@ -114,9 +114,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId The view id.
      * @param color  A color, not a resource id.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setBackgroundColor(int viewId, int color) {
+    public BaseVirtualViewHolder setBackgroundColor(int viewId, int color) {
         View view = getView(viewId);
         view.setBackgroundColor(color);
         return this;
@@ -127,9 +127,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId        The view id.
      * @param backgroundRes A resource to use as a background.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setBackgroundRes(int viewId, @DrawableRes int backgroundRes) {
+    public BaseVirtualViewHolder setBackgroundRes(int viewId, @DrawableRes int backgroundRes) {
         View view = getView(viewId);
         view.setBackgroundResource(backgroundRes);
         return this;
@@ -140,9 +140,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId    The view id.
      * @param textColor The text color (not a resource id).
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setTextColor(int viewId, int textColor) {
+    public BaseVirtualViewHolder setTextColor(int viewId, int textColor) {
         TextView view = getView(viewId);
         view.setTextColor(textColor);
         return this;
@@ -154,9 +154,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId   The view id.
      * @param drawable The image drawable.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setImageDrawable(int viewId, Drawable drawable) {
+    public BaseVirtualViewHolder setImageDrawable(int viewId, Drawable drawable) {
         ImageView view = getView(viewId);
         view.setImageDrawable(drawable);
         return this;
@@ -165,7 +165,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     /**
      * Add an action to set the image of an image view. Can be called multiple times.
      */
-    public BaseViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
+    public BaseVirtualViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
         ImageView view = getView(viewId);
         view.setImageBitmap(bitmap);
         return this;
@@ -175,7 +175,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * Add an action to set the alpha of a view. Can be called multiple times.
      * Alpha between 0-1.
      */
-    public BaseViewHolder setAlpha(int viewId, float value) {
+    public BaseVirtualViewHolder setAlpha(int viewId, float value) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getView(viewId).setAlpha(value);
         } else {
@@ -193,9 +193,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId  The view id.
      * @param visible True for VISIBLE, false for GONE.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setVisible(int viewId, boolean visible) {
+    public BaseVirtualViewHolder setVisible(int viewId, boolean visible) {
         View view = getView(viewId);
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
         return this;
@@ -205,9 +205,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * Add links into a TextView.
      *
      * @param viewId The id of the TextView to linkify.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder linkify(int viewId) {
+    public BaseVirtualViewHolder linkify(int viewId) {
         TextView view = getView(viewId);
         Linkify.addLinks(view, Linkify.ALL);
         return this;
@@ -216,7 +216,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     /**
      * Apply the typeface to the given viewId, and enable subpixel rendering.
      */
-    public BaseViewHolder setTypeface(int viewId, Typeface typeface) {
+    public BaseVirtualViewHolder setTypeface(int viewId, Typeface typeface) {
         TextView view = getView(viewId);
         view.setTypeface(typeface);
         view.setPaintFlags(view.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
@@ -226,7 +226,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     /**
      * Apply the typeface to all the given viewIds, and enable subpixel rendering.
      */
-    public BaseViewHolder setTypeface(Typeface typeface, int... viewIds) {
+    public BaseVirtualViewHolder setTypeface(Typeface typeface, int... viewIds) {
         for (int viewId : viewIds) {
             TextView view = getView(viewId);
             view.setTypeface(typeface);
@@ -240,9 +240,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId   The view id.
      * @param progress The progress.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setProgress(int viewId, int progress) {
+    public BaseVirtualViewHolder setProgress(int viewId, int progress) {
         ProgressBar view = getView(viewId);
         view.setProgress(progress);
         return this;
@@ -254,9 +254,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param viewId   The view id.
      * @param progress The progress.
      * @param max      The max value of a ProgressBar.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setProgress(int viewId, int progress, int max) {
+    public BaseVirtualViewHolder setProgress(int viewId, int progress, int max) {
         ProgressBar view = getView(viewId);
         view.setMax(max);
         view.setProgress(progress);
@@ -268,9 +268,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId The view id.
      * @param max    The max value of a ProgressBar.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setMax(int viewId, int max) {
+    public BaseVirtualViewHolder setMax(int viewId, int max) {
         ProgressBar view = getView(viewId);
         view.setMax(max);
         return this;
@@ -281,9 +281,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId The view id.
      * @param rating The rating.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setRating(int viewId, float rating) {
+    public BaseVirtualViewHolder setRating(int viewId, float rating) {
         RatingBar view = getView(viewId);
         view.setRating(rating);
         return this;
@@ -295,9 +295,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param viewId The view id.
      * @param rating The rating.
      * @param max    The range of the RatingBar to 0...max.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setRating(int viewId, float rating, int max) {
+    public BaseVirtualViewHolder setRating(int viewId, float rating, int max) {
         RatingBar view = getView(viewId);
         view.setMax(max);
         view.setRating(rating);
@@ -310,7 +310,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param viewId add the child view id   can support childview click
      * @return
      */
-    public BaseViewHolder addOnClickListener(int viewId) {
+    public BaseVirtualViewHolder addOnClickListener(int viewId) {
         childClickViewIds.add(viewId);
         return this;
     }
@@ -321,7 +321,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param viewId
      * @return
      */
-    public BaseViewHolder addOnLongClickListener(int viewId) {
+    public BaseVirtualViewHolder addOnLongClickListener(int viewId) {
         itemChildLongClickViewIds.add(viewId);
         return this;
     }
@@ -332,9 +332,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId   The view id.
      * @param listener The on touch listener;
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setOnTouchListener(int viewId, View.OnTouchListener listener) {
+    public BaseVirtualViewHolder setOnTouchListener(int viewId, View.OnTouchListener listener) {
         View view = getView(viewId);
         view.setOnTouchListener(listener);
         return this;
@@ -345,9 +345,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId   The view id.
      * @param listener The on long click listener;
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
+    public BaseVirtualViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
         View view = getView(viewId);
         view.setOnLongClickListener(listener);
         return this;
@@ -358,9 +358,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId   The view id.
      * @param listener The item on click listener;
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setOnItemClickListener(int viewId, AdapterView.OnItemClickListener listener) {
+    public BaseVirtualViewHolder setOnItemClickListener(int viewId, AdapterView.OnItemClickListener listener) {
         AdapterView view = getView(viewId);
         view.setOnItemClickListener(listener);
         return this;
@@ -371,9 +371,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId   The view id.
      * @param listener The item long click listener;
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setOnItemLongClickListener(int viewId, AdapterView.OnItemLongClickListener listener) {
+    public BaseVirtualViewHolder setOnItemLongClickListener(int viewId, AdapterView.OnItemLongClickListener listener) {
         AdapterView view = getView(viewId);
         view.setOnItemLongClickListener(listener);
         return this;
@@ -384,9 +384,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId   The view id.
      * @param listener The item selected click listener;
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setOnItemSelectedClickListener(int viewId, AdapterView.OnItemSelectedListener listener) {
+    public BaseVirtualViewHolder setOnItemSelectedClickListener(int viewId, AdapterView.OnItemSelectedListener listener) {
         AdapterView view = getView(viewId);
         view.setOnItemSelectedListener(listener);
         return this;
@@ -397,9 +397,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId   The view id.
      * @param listener The checked change listener of compound button.
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setOnCheckedChangeListener(int viewId, CompoundButton.OnCheckedChangeListener listener) {
+    public BaseVirtualViewHolder setOnCheckedChangeListener(int viewId, CompoundButton.OnCheckedChangeListener listener) {
         CompoundButton view = getView(viewId);
         view.setOnCheckedChangeListener(listener);
         return this;
@@ -410,9 +410,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId The view id.
      * @param tag    The tag;
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setTag(int viewId, Object tag) {
+    public BaseVirtualViewHolder setTag(int viewId, Object tag) {
         View view = getView(viewId);
         view.setTag(tag);
         return this;
@@ -424,9 +424,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param viewId The view id.
      * @param key    The key of tag;
      * @param tag    The tag;
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setTag(int viewId, int key, Object tag) {
+    public BaseVirtualViewHolder setTag(int viewId, int key, Object tag) {
         View view = getView(viewId);
         view.setTag(key, tag);
         return this;
@@ -437,9 +437,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId  The view id.
      * @param checked The checked status;
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setChecked(int viewId, boolean checked) {
+    public BaseVirtualViewHolder setChecked(int viewId, boolean checked) {
         View view = getView(viewId);
         // View unable cast to Checkable
         if (view instanceof CompoundButton) {
@@ -455,9 +455,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      *
      * @param viewId  The view id.
      * @param adapter The adapter;
-     * @return The BaseViewHolder for chaining.
+     * @return The BaseVirtualViewHolder for chaining.
      */
-    public BaseViewHolder setAdapter(int viewId, Adapter adapter) {
+    public BaseVirtualViewHolder setAdapter(int viewId, Adapter adapter) {
         AdapterView view = getView(viewId);
         view.setAdapter(adapter);
         return this;

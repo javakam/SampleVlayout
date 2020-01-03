@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initListeners() {
         findViewById(R.id.tv_zqrb).setOnClickListener(this);
+        findViewById(R.id.tv_web_video).setOnClickListener(this);
     }
 
     @Override
@@ -35,11 +36,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            case R.id.tv_detail_exo_list:
 //                break;
             case R.id.tv_zqrb:
-                Intent intent=  new Intent(this, FragmentContainerActivity.class);
+                Intent intent = new Intent(this, FragmentContainerActivity.class);
                 intent.putExtra(FragmentContainerActivity.FRAGMENT_NAME, NewsMediaListFragment.class.getName());
                 startActivity(intent);
+                break;
+            case R.id.tv_web_video:
+                startActivity(new Intent(this, WebViewInnerVideoActivity.class));
                 break;
             default:
         }
     }
+
 }
